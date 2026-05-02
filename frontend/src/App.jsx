@@ -1,16 +1,18 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import SignIn from "./components/SignIn";
 import SignUp from "./components/SignUp";
 import TextEditor from "./components/TextEditor";
+import Dashboard from "./pages/Dashboard";
+import Home from "./pages/Home";
 
 
 export default function App() {
     return(
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<SignIn />} />
+                <Route path="/" element={<Home />} />
                 <Route path="/signup" element={<SignUp />} />
                 <Route path="/editor" element={<TextEditor />} />
+                <Route path="/dashboard" element={<Dashboard />} />
             </Routes>
         </BrowserRouter>
       

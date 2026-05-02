@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { login } from "../api/auth.api";
+import { useNavigate } from "react-router-dom";
 
 function SignIn() {
 
@@ -8,6 +9,7 @@ function SignIn() {
     password: ''
   })
 
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -26,10 +28,22 @@ function SignIn() {
 
       console.log('data', formData);
 
+      // send data POST request
       const data = await login(
         formData.email,
         formData.password,
       )
+
+      // save in local storage
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('user', JSON.stringify({
+        _id: data._id,
+        name: data.name,
+        email: data.email
+      }))
+
+      // redirect to dashboard
+      navigate('/dashboard');
 
     } catch (error) {
       setError(error.response?.data?.message || "Something went wrong!")

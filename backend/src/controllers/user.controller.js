@@ -1,18 +1,32 @@
 import { User } from "../models/user.model.js";
 import isEmail from "validator/lib/isEmail.js"
 import logger from "../configs/logger.js";
+import jwt from 'jsonwebtoken' ;
+
+
+const generateToken = (id) =>{
+    return jwt.sign({id}, process.env.JWT_SECRET, {
+        expiresIn: '7d'
+    })
+}
 
 
 const registerUser = async (req, res) => {
     try {
+
+        console.log('request body, ', req.body);
+        
         const { name, email, password } = req.body;
 
         // validation
         if (!name || !email || !password)
+        {
+
             logger.warn("User Registration Failed - Missing Fields");
             return res.status(400).json({
                 message: "All fields are required"
             })
+        }
 
 
         // check if email format is valid
@@ -39,8 +53,13 @@ const registerUser = async (req, res) => {
             }
         );
 
-        logger.warn(`User Registration Success - ${email}`);
-        res.status(201).json({ message: "User registered sucessfully" });
+        logger.info(`User Registration Success - ${email}`);
+        res.status(201).json({ 
+            _id: newUser._id,
+            name: newUser.name,
+            email: newUser.email,
+            token: generateToken(newUser._id)
+        });
 
     } catch (error) {
 
@@ -69,7 +88,13 @@ const loginUser = async (req, res) => {
 
 
         logger.info(`User Login Success -  ${email}`);
-        res.status(200).json({ message: "User logged in" })
+        res.status(200).json({ 
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+            token: generateToken(user._id)
+     
+        })
 
     }
     catch (error) {

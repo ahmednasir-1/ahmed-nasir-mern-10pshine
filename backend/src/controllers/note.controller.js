@@ -35,7 +35,7 @@ const getNotes = async (req, res) => {
         // const { title, content } = req.body;
 
         // fetch user id from link and find notes for this user
-        const notes = await Note.find({ user: req.user_.id });
+        const notes = await Note.find({ user: req.user._id });
         if(!notes)
         {
             logger.info(`Note Found Failed - No Note Found for ${req.user._id}`);

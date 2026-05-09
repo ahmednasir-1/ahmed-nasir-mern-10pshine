@@ -38,20 +38,20 @@ function Sidebar() {
   ]
 
   return (
-    <div className="w-56 min-w-56 bg-white border-r border-gray-200 flex flex-col h-full">
+    <div className="w-56 min-w-56 bg-(--color-heading) border-r border-gray-200 flex flex-col h-full">
 
      
 
       {/* Nav */}
-      <nav className="flex flex-col gap-1 p-3 flex-1">
+      <nav className="flex flex-col gap-1 p-3 flex-1 my-12">
         {navItems.map((item) => (
           <Link
             key={item.path}
             to={item.path}
             className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors ${
               location.pathname === item.path
-                ? 'bg-gray-100 text-gray-900 font-medium'
-                : 'text-gray-500 hover:bg-gray-50 hover:text-gray-900'
+                ? 'bg-(--color-surface) text-gray-900 font-medium'
+                : 'text-(--color-btn-text) hover:bg-(--color-surface) hover:text-gray-900'
             }`}
           >
             {item.icon}
@@ -61,23 +61,23 @@ function Sidebar() {
       </nav>
 
       {/* User Area */}
-      <div className="border-t border-gray-100 p-3">
+      <div className=" bg-none p-3">
 
         {/* user info */}
         <div className="flex items-center gap-3 px-2 py-2">
-          <div className="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center text-xs font-medium text-blue-800 flex-shrink-0">
+          <div className="w-7 h-7 rounded-full bg-(--color-bg) flex items-center justify-center text-xs font-medium text-(--color-btn-heading) flex-shrink-0">
             {user.name?.charAt(0).toUpperCase() || 'U'}
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-gray-900 truncate">{user.name || 'User'}</p>
-            <p className="text-xs text-gray-400 truncate">{user.email || ''}</p>
+            <p className="text-sm font-medium text-(--color-bg) truncate">{user.name || 'User'}</p>
+            <p className="text-xs text-(--color-surface) truncate">{user.email || ''}</p>
           </div>
         </div>
 
         {/* logout button */}
         <button
           onClick={handleLogout}
-          className="w-full mt-1 flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-red-500 hover:bg-red-50 transition-colors"
+          className="w-full mt-1 flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-(--color-btn-text) hover:bg-(--color-surface) hover:text-gray-900 transition-colors"
         >
           <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
             <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>

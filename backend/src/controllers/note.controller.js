@@ -4,6 +4,9 @@ import logger from "../configs/logger.js";
 
 const createNote = async (req, res) => {
     try {
+
+        console.log(req);
+        
         const { title, content } = req.body;
 
         if (!title || !content) {
@@ -51,6 +54,29 @@ const getNotes = async (req, res) => {
     }
 }
 
+const singleNote = async(req,  res ) =>{
+    try {
+
+        console.log(req.user._id);
+        console.log(req.params.id);
+        
+        const note = await Note.findOne({
+            _id: req.params.id,
+            user: req.user._id
+        })
+        if(!note)
+        {
+            logger.info(`Note Found Failed - No Note Found ${req.user._id}`)
+            return res.status(400).json({message: "No note found"})
+        }
+
+        logger.info("Note Found Success")
+        res.status(200).json(note)
+    } catch (error) {
+        logger.error("Note Found Failed - Server Error")
+        res.status(500).json({message: "server error"})
+    }
+}
 const updateNote = async (req, res) => {
 
     try {
@@ -108,4 +134,4 @@ const delNote = async (req, res)=>{
     }
 }
 
-export { createNote, getNotes, updateNote, delNote };
+export { createNote, getNotes, updateNote, delNote, singleNote };

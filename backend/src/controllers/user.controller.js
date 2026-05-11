@@ -2,13 +2,15 @@ import { User } from "../models/user.model.js";
 import isEmail from "validator/lib/isEmail.js"
 import logger from "../configs/logger.js";
 import jwt from 'jsonwebtoken' ;
-
+import crypto from 'crypto'
+import { sendEmailToUser } from "../configs/email.js";
 
 const generateToken = (id) =>{
     return jwt.sign({id}, process.env.JWT_SECRET, {
-        expiresIn: '7d'
+        expiresIn: '1d'
     })
 }
+
 
 
 const registerUser = async (req, res) => {
@@ -43,23 +45,26 @@ const registerUser = async (req, res) => {
             return res.status(400).json({ message: "User already exists" })
         }
 
-        // create user
 
+        // generate token
+        const token = crypto.randomBytes(32).toString('hex')
+
+        // create user
         const newUser = await User.create(
             {
                 name,
                 email: email.toLowerCase(),
-                password
+                password,
+                isVerified: false,
+                verificationToken: token
             }
         );
 
+        // send email
+        await sendEmailToUser(newUser.email, token)
+
         logger.info(`User Registration Success - ${email}`);
-        res.status(201).json({ 
-            _id: newUser._id,
-            name: newUser.name,
-            email: newUser.email,
-            token: generateToken(newUser._id)
-        });
+        res.status(201).json({ mesasge: "Registration Success! Please check your email to activate your account"   });
 
     } catch (error) {
 
@@ -67,6 +72,33 @@ const registerUser = async (req, res) => {
         res.status(500).json({ message: "Internal Server Error", error: error.message });
     }
 }
+
+const verifyEmail = async (req, res) =>{
+
+    try {
+        
+    
+    const {token} = req.params;
+
+    const user = await User.findOne({verificationToken: token})
+
+    if(!user)
+    {
+        return res.status(400).json({message: "User doensot exist"})
+    }
+
+    user.verificationToken = null;
+    user.isVerified = true;
+    await user.save()
+
+    logger.info(`Email Verified - ${user.email}`)
+
+    } catch (error) {
+        logger.error(`Email Verification Failed - Server Error ${error}`)
+        res.status(500).json({message: "Internal server error - verificaton failed"})
+    }
+}
+
 
 const loginUser = async (req, res) => {
 
@@ -78,6 +110,13 @@ const loginUser = async (req, res) => {
             logger.warn(`User Login Failed - Email doesnot exist ${email}`);
             return res.status(400).json({ message: "User doesnot exist" });
         }
+
+        if(!user.isVerified)
+        {
+            logger.info(`User Login Failed - Email doesnot verified ${email}`)
+            return res.status(400).json({message: "Please verify your email first!"})
+        }
+
 
         // compare password
         const isMatch = await user.comparePassword(password);
@@ -104,4 +143,4 @@ const loginUser = async (req, res) => {
 
 }
 
-export { registerUser, loginUser };
+export { registerUser, loginUser, verifyEmail };

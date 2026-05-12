@@ -33,16 +33,9 @@ function SignUp() {
       const data = await registerAPI(
         formData.name,
         formData.email,
-        formData.password
-      )
+        formData.password,
 
-      // save token to local storage
-      localStorage.setItem('token', data.token)
-      localStorage.setItem('user', JSON.stringify({
-        _id: data._id,
-        name: data.name,
-        email: data.email
-      }))
+      )
 
       // redirect to sign in page
       navigate('/');

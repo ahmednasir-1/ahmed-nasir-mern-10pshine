@@ -1,5 +1,4 @@
-import mongoose from "mongoose";
-import { Schema } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import bcrypt from "bcrypt";
 
 const userSchema = new Schema(
@@ -27,6 +26,16 @@ const userSchema = new Schema(
             required: true,
             minLength: 6,
             maxLength: 1024
+        },
+
+        isVerified: {
+            type: Boolean,
+            default: false
+        }
+        ,
+        verificationToken: {
+            type: String,
+            default: null
         }
     },
     {
@@ -38,7 +47,10 @@ const userSchema = new Schema(
 // hash password before saving
 
 userSchema.pre("save", async function () {
-        this.password = await bcrypt.hash(this.password, 10);
+    if (!this.isModified("password")) {
+      return
+   }
+    this.password = await bcrypt.hash(this.password, 10);
 
 })
 

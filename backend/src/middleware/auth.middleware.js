@@ -23,7 +23,7 @@ const protect = async (req, res, next) => {
 
     }
     catch (error) {
-        logger.error("Request Error - Server Error")
+        logger.error(`Request Error - Server Error ${error}`)
         res.status(401).json({ message: "No authorization, No token" })
     }
 }

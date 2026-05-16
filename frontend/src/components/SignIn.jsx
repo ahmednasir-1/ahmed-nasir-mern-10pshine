@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { login } from "../api/auth.api";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function SignIn() {
 
@@ -55,71 +55,69 @@ function SignIn() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r bg-(--color-bg)">
+    <div className="min-h-screen bg-gradient-to-br from-primary via-[#161922] to-primary flex items-center justify-center p-4 font-sans antialiased text-text-primary">
 
-      <div className="bg-(--color-bg) rounded-2xl shadow-lg flex w-[800px] overflow-hidden">
+      <div className="bg-secondary w-full max-w-md p-10 border border-border shadow-card">
 
-        {/* Left Side */}
-        <div className="w-1/2 bg-(--color-surface) text-(--color-heading) flex flex-col justify-center items-center p-8">
-          <h1 className="text-3xl font-bold mb-4">Notes App</h1>
-          <p className="text-center text-sm opacity-80 text-(--color-text)">
-            Make your notes your strength
+        <div className="text-center mb-8">
+          <h2 className="font-serif text-3xl font-medium tracking-tight text-text-primary">Welcome Back</h2>
+        </div>
+
+        {error && (<p className="text-red-500 text-sm mb-4">{error}</p>)}
+
+        <form className="space-y-5">
+
+          <div>
+            <label className="block text-[10px] uppercase tracking-widest font-semibold text-text-primary mb-1.5">Email Address</label>
+            <input
+              type="email"
+              name="email"
+              placeholder="name@domain.com"
+              className="w-full px-4 py-2.5 bg-primary border border-border text-sm text-text-primary rounded-none focus:outline-none focus:border-accent transition-colors placeholder:text-text-secondary/30"
+              value={formData.email}
+              onChange={(e) => handleChange(e)}
+            />
+          </div>
+
+          <div>
+            <div className="flex justify-between items-center mb-1.5">
+              <label className="block text-[10px] uppercase tracking-widest font-semibold text-text-primary">Password</label>
+              <a href="#" className="text-[10px] uppercase tracking-wider text-text-secondary hover:text-accent transition-colors">Forgot Password?</a>
+            </div>
+            <input
+              type="password"
+              name="password"
+              placeholder="••••••••"
+              className="w-full px-4 py-2.5 bg-primary border border-border text-sm text-text-primary rounded-none focus:outline-none focus:border-accent transition-colors placeholder:text-text-secondary/30"
+              value={formData.password}
+              onChange={(e) => handleChange(e)}
+            />
+          </div>
+
+          <button
+            onClick={handleSubmit}
+            disabled={loading}
+            className="w-full py-3 bg-accent hover:bg-accent-hover text-primary text-xs uppercase tracking-widest font-semibold transition-all shadow-btn mt-2 cursor-pointer"
+          >
+            {loading ? "Logging In..." : "Login"}
+          </button>
+
+        </form>
+
+
+
+        <div className="text-center mt-6 pt-6 border-t border-border">
+          <p className="text-xs text-text-secondary">
+            Don't have a account?
+            <Link to="/signup" className="text-text-primary font-medium underline underline-offset-4 hover:text-accent transition-colors">
+              Sign Up here
+            </Link>
           </p>
         </div>
 
-        {/* Right Side */}
-        <div className="w-1/2 p-8">
-          <h2 className="text-2xl font-semibold text-center mb-6 text-(--color-heading)">
-            Sign In
-          </h2>
-
-          {/* error message */}
-          {error && (<p className="text-red-500 text-sm mb-4">{error}</p>)}
-
-
-          <form className="flex flex-col gap-4">
-
-            <div className="mb-4">
-              <label className="block text-(--color-heading)">Email</label>
-              <input
-                type="email"
-                name="email"
-                placeholder="Enter email"
-                className="p-3 border rounded-lg outline-none focus:ring-2 focus:ring-(--color-heading)"
-                value={formData.email}
-                onChange={(e) => handleChange(e)}
-              />
-            </div>
-
-            <div className="mb-4">
-              <label className="block text-(--color-heading)">Password</label>
-              <input
-                type="password"
-                name="password"
-                placeholder="Password"
-                className="p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-(--color-heading)"
-                value={formData.password}
-                onChange={(e) => handleChange(e)}
-              />
-            </div>
-
-            <button onClick={handleSubmit}
-              disabled={loading}
-              className="bg-(--color-heading) text-white py-3 rounded-lg hover:bg-(--color-text) transition">
-              {loading ? "loging in.." : "Login"}
-            </button>
-          </form>
-
-          {/* <p className="text-sm text-center mt-4">
-            <a href="#" className="text-(--color-primary) hover:underline">
-              Forgot Password?
-            </a>
-          </p> */}
-        </div>
       </div>
-
     </div>
-  );
+  )
 }
 
 export default SignIn;

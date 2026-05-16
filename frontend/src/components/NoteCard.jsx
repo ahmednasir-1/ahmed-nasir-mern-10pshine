@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { BiEdit } from "react-icons/bi";
+import { MdDeleteOutline } from "react-icons/md";
 
-
-function NoteCard({ note, onDelete }) {
-  const [showMenu, setShowMenu] = useState(false)
+function NoteCard({ note, onDelete, onDoubleClick }) {
+  // const [showMenu, setShowMenu] = useState(false)
   const navigate = useNavigate('')
 
   const formatDate = (dateStr) => {
@@ -17,7 +18,7 @@ function NoteCard({ note, onDelete }) {
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
   }
 
-  
+
   // strip HTML tags from content for preview
   const stripHtml = (html) => {
     const div = document.createElement('div')
@@ -26,58 +27,54 @@ function NoteCard({ note, onDelete }) {
   }
 
   return (
-    <div className="relative bg-white border border-gray-200 rounded-xl p-4 flex flex-col gap-2 min-h-[140px] hover:border-gray-300 transition-all cursor-pointer group">
+    <div
+      onDoubleClick={onDoubleClick}
+      className="relative bg-journal-secondary border border-journal-border rounded-none p-6 flex flex-col min-h-[180px] shadow-journal-card hover:border-journal-accent/40 hover:-translate-y-0.5 transition-all duration-300 cursor-pointer group"
+    >
 
-
-      {/* Title */}
-      <h3 className="text-sm font-medium text-gray-900 leading-snug">
-        {note.title}
+      <h3 className="font-serif text-lg font-medium text-journal-text-primary leading-tight pr-6 group-hover:text-journal-accent transition-colors">
+        {note.title || "Untitled Canvas"}
       </h3>
 
-      {/* Preview */}
-      <p className="text-xs text-gray-500 leading-relaxed flex-1 line-clamp-3">
-        {stripHtml(note.content)}
+
+      <p className="font-sans font-light text-xs text-journal-text-secondary leading-relaxed line-clamp-3 mt-2 mb-4">
+        {stripHtml(note.content) || "No additional content..."}
       </p>
 
-      {/* Date */}
-      <span className="text-xs text-gray-400 mt-auto">
-        {formatDate(note.createdAt)}
-      </span>
 
-      {/* Menu Button */}
-      <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
+      <div className="mt-auto pt-3 border-t border-journal-border/30 flex items-center justify-between">
+        <span className="font-sans text-[10px] uppercase tracking-widest text-journal-text-secondary">
+          {formatDate(note.createdAt)}
+        </span>
+      </div>
+
+
+      <div className="absolute right-3 top-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+
+        {/* edit button  */}
         <button
           onClick={(e) => {
-            e.stopPropagation()
-            setShowMenu(!showMenu)
+            e.stopPropagation();
+            navigate(`/notes/edit/${note._id}`);
           }}
-          className="text-gray-400 hover:text-gray-600 px-1"
+          className="p-1.5 bg-journal-primary border border-journal-border text-journal-text-secondary hover:text-journal-accent hover:border-journal-accent/30 transition-colors cursor-pointer"
+          title="Edit Entry"
         >
-          ···
+          <BiEdit className="w-4 h-4" />
         </button>
 
-        {/* Dropdown */}
-        {showMenu && (
-          <div className="absolute right-0 top-6 bg-white border border-gray-200 rounded-lg shadow-md z-10 min-w-[120px]">
+        {/* delete button  */}
+        <button
+          onClick={() => onDelete(note._id)}
+          className="p-1.5 bg-journal-primary border border-journal-border text-journal-text-secondary hover:text-journal-accent hover:border-journal-accent/30 transition-colors cursor-pointer"
+        >
+          <MdDeleteOutline />
 
-            {/* edit button  */}
-            <button onClick={() => navigate(`/notes/edit/${note._id}`)} className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50">
-              Edit
-            </button>
-
-            {/* delete button  */}
-            <button
-              onClick={() => onDelete(note._id)}
-              className="w-full text-left px-3 py-2 text-sm text-red-500 hover:bg-red-50"
-            >
-              Delete
-            </button>
-            
-          </div>
-        )}
+        </button>
       </div>
     </div>
-  )
+  );
+
 }
 
 export default NoteCard

@@ -41,7 +41,7 @@ function SignUp() {
       navigate('/');
 
     } catch (error) {
-     setError(error.response?.data?.message || "Something went wrong")
+      setError(error.response?.data?.message || "Something went wrong")
 
     }
     finally {
@@ -50,77 +50,76 @@ function SignUp() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r bg-[var(--color-bg)]">
+    <div className="min-h-screen bg-gradient-to-br from-primary via-[#161922] to-primary flex items-center justify-center p-4 font-sans antialiased text-text-primary">
 
-      <div className="bg-[var(--color-bg)] rounded-2xl shadow-lg w-[800px] overflow-hidden flex justify-center">
+      <div className="bg-secondary w-full max-w-md p-10 border border-border shadow-card">
 
-
-        <div className="w-1/2 p-8">
-          <h2 className="text-2xl font-semibold text-center mb-6 text-[var(--color-heading)]">
-            Sign Up
-          </h2>
-
-
-          {/* error message */}
-          {error && (<p className="text-red-500 text-sm mb-4">{error}</p>)}
-
-
-          <form className="flex flex-col gap-4">
-
-            <div className="mb-4">
-              <label className="block text-(--color-heading)">Name</label>
-              <input
-                type="text" autoComplete="on"
-                name="name"
-                placeholder="Enter your name"
-                className="p-3 border rounded-lg outline-none focus:ring-2 focus:ring-(--color-heading)"
-                value={formData.name}
-                onChange={(e) => handleChange(e)}
-
-              />
-            </div>
-
-            <div className="mb-4">
-              <label className="block text-[var(--color-heading)]">Email</label>
-              <input
-                type="email"
-                name="email"
-                placeholder="Enter email"
-                className="p-3 border rounded-lg outline-none focus:ring-2 focus:ring-(--color-heading)"
-                value={formData.email}
-                onChange={(e) => handleChange(e)}
-              />
-            </div>
-
-            <div className="mb-4">
-              <label className="block text-[var(--color-heading)]">Password</label>
-              <input
-                type="password"
-                name="password"
-                placeholder="Password"
-                className="p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-(--color-heading)"
-                value={formData.password}
-                onChange={(e) => handleChange(e)}
-              />
-            </div>
-
-            <button className="bg-(--color-heading) text-white py-3 rounded-lg hover:bg-(--color-text) transition"
-              onClick={handleSubmit}
-              disabled={loading} >
-              {loading ? 'Signing Up...' : 'Create an Account'}
-            </button>
-          </form>
-
-          <div className="text-sm text-center mt-4">
-            <Link to="/" className="text-(--color-primary) hover:underline">
-              Already have an account?
-            </Link>
-
-          </div>
+        <div className="text-center mb-8">
+          <h2 className="font-serif text-3xl font-medium tracking-tight text-text-primary">Welcome Back</h2>
+          <p className="text-xs text-text-secondary mt-2">Create your account.</p>
         </div>
-      </div>
 
+        {error && (<p className="text-red-500 text-sm mb-4">{error}</p>)}
+
+        <form className="space-y-5">
+
+          <div>
+            <label className="block text-[10px] uppercase tracking-widest font-semibold text-text-primary mb-1.5">Full Name</label>
+            <input
+              type="text" autoComplete="on"
+              name="name"
+              placeholder="Jane Doe"
+              className="w-full px-4 py-2.5 bg-primary border border-border text-sm text-text-primary rounded-none focus:outline-none focus:border-accent transition-colors placeholder:text-text-secondary/30"
+              value={formData.name}
+              onChange={(e) => handleChange(e)}
+            />
+          </div>
+
+          <div>
+            <label className="block text-[10px] uppercase tracking-widest font-semibold text-text-primary mb-1.5">Email</label>
+            <input
+              type="email"
+              name="email"
+              placeholder="name@domain.com"
+              className="w-full px-4 py-2.5 bg-primary border border-border text-sm text-text-primary rounded-none focus:outline-none focus:border-accent transition-colors placeholder:text-text-secondary/30"
+              value={formData.email}
+              onChange={(e) => handleChange(e)}
+            />
+          </div>
+
+          <div>
+            <label className="block text-[10px] uppercase tracking-widest font-semibold text-text-primary mb-1.5">Password</label>
+            <input
+              type="password"
+              name="password"
+              placeholder="Create secure password"
+              className="w-full px-4 py-2.5 bg-primary border border-border text-sm text-text-primary rounded-none focus:outline-none focus:border-accent transition-colors placeholder:text-text-secondary/30"
+              value={formData.password}
+              onChange={(e) => handleChange(e)}
+            />
+          </div>
+
+          <button
+            className="w-full py-3 bg-accent hover:bg-accent-hover text-primary text-xs uppercase tracking-widest font-semibold transition-all shadow-btn mt-2 cursor-pointer"
+            onClick={handleSubmit}
+            disabled={loading}>
+            {loading ? 'Signing Up...' : 'Create an Account'}
+          </button>
+
+        </form>
+
+        <div className="text-center mt-6 pt-6 border-t border-border">
+          <p className="text-xs text-text-secondary">
+            Already have an account?{' '}
+            <Link to="/" className="text-text-primary font-medium underline underline-offset-4 hover:text-accent transition-colors">
+              Sign in here
+            </Link>
+          </p>
+        </div>
+
+      </div>
     </div>
+
   );
 }
 

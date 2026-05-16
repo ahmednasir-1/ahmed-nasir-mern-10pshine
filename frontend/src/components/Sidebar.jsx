@@ -18,8 +18,8 @@ function Sidebar() {
       path: '/dashboard',
       icon: (
         <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-          <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
-          <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+          <rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" />
+          <rect x="14" y="14" width="7" height="7" /><rect x="3" y="14" width="7" height="7" />
         </svg>
       )
     },
@@ -28,66 +28,66 @@ function Sidebar() {
       path: '/trash',
       icon: (
         <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-          <polyline points="3 6 5 6 21 6"/>
-          <path d="M19 6l-1 14H6L5 6"/>
-          <path d="M10 11v6M14 11v6"/>
-          <path d="M9 6V4h6v2"/>
+          <polyline points="3 6 5 6 21 6" />
+          <path d="M19 6l-1 14H6L5 6" />
+          <path d="M10 11v6M14 11v6" />
+          <path d="M9 6V4h6v2" />
         </svg>
       )
     }
   ]
 
   return (
-    <div className="w-56 min-w-56 bg-(--color-heading) border-r border-gray-200 flex flex-col h-full">
+    <div className="w-64 bg-secondary border-r border-border flex flex-col h-full p-8 shrink-0 select-none">
 
-     
 
       {/* Nav */}
-      <nav className="flex flex-col gap-1 p-3 flex-1 my-12">
+      <nav className="flex flex-col space-y-4 text-sm flex-1">
         {navItems.map((item) => (
           <Link
             key={item.path}
             to={item.path}
-            className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors ${
-              location.pathname === item.path
-                ? 'bg-(--color-surface) text-gray-900 font-medium'
-                : 'text-(--color-btn-text) hover:bg-(--color-surface) hover:text-gray-900'
-            }`}
+            className={`flex items-center gap-2.5 transition-colors ${location.pathname === item.path
+                ? 'font-medium text-text-primary'
+                : 'text-text-secondary hover:text-text-primary'
+              }`}
           >
-            {item.icon}
-            {item.label}
+            {location.pathname === item.path && (
+              <span className="w-1.5 h-1.5 rounded-full bg-accent shrink-0" />
+            )}
+            <span className={location.pathname !== item.path ? 'pl-4' : ''}>
+              {item.label}
+            </span>
           </Link>
         ))}
       </nav>
 
       {/* User Area */}
-      <div className=" bg-none p-3">
-
-        {/* user info */}
-        <div className="flex items-center gap-3 px-2 py-2">
-          <div className="w-7 h-7 rounded-full bg-(--color-bg) flex items-center justify-center text-xs font-medium text-(--color-btn-heading) flex-shrink-0">
-            {user.name?.charAt(0).toUpperCase() || 'U'}
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-(--color-bg) truncate">{user.name || 'User'}</p>
-            <p className="text-xs text-(--color-surface) truncate">{user.email || ''}</p>
-          </div>
+      <div className="pt-4 border-t border-border flex items-center space-x-3">
+        <div className="w-8 h-8 rounded-none bg-primary border border-border flex items-center justify-center font-serif text-sm font-semibold text-accent shrink-0">
+          {user.name?.charAt(0).toUpperCase() || 'U'}
         </div>
-
-        {/* logout button */}
+        <div className="flex-1 min-w-0">
+          <p className="text-xs font-medium truncate text-text-primary">
+            {user.name || 'User'}
+          </p>
+          <p className="text-[10px] text-text-secondary uppercase tracking-wider truncate">
+            {user.email || ''}
+          </p>
+        </div>
         <button
           onClick={handleLogout}
-          className="w-full mt-1 flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-(--color-btn-text) hover:bg-(--color-surface) hover:text-gray-900 transition-colors"
+          className="text-text-secondary hover:text-text-primary transition-colors shrink-0"
+          title="Logout"
         >
           <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-            <polyline points="16 17 21 12 16 7"/>
-            <line x1="21" y1="12" x2="9" y2="12"/>
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+            <polyline points="16 17 21 12 16 7" />
+            <line x1="21" y1="12" x2="9" y2="12" />
           </svg>
-          Logout
         </button>
-        
       </div>
+
     </div>
   )
 }

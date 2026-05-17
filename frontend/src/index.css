@@ -1,11 +1,38 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap');
 @import "tailwindcss";
 
-:root {
-  --color-bg:       #F0F9FF;
-  --color-surface:  #E0F2FE;
-  --color-heading:  #0C4A6E;
-  --color-text:     #0369A1;
-  --color-primary:  #3B82F6;
-  --color-btn-text: #FFFFFF;
-  --color-accent:   #10B981;
+
+@theme {
+ 
+  --color-primary: #0D0E12;     
+  --color-secondary: #16181F;   
+  --color-text-primary: #F3F4F6; 
+  --color-text-secondary: #9CA3AF;
+  --color-border: #242731;      
+  --color-accent: #E5E7EB;      
+  --color-accent-hover: #FFFFFF; 
+  
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-sans: 'Inter', system-ui, sans-serif;
+
+  --shadow-card: 0 4px 20px -2px rgba(0, 0, 0, 0.7);
+  --shadow-btn: 0 0 15px rgba(229, 231, 235, 0.1);
+}
+
+
+.ql-toolbar {
+  border: none !important;
+ 
+}
+.ql-toolbar .ql-stroke{
+  stroke: white !important;
+ 
+}
+
+.ql-container {
+  border: none !important;
+}
+
+.ql-editor {
+  border: none !important;
 }

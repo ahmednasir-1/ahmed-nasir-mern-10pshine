@@ -1,83 +1,89 @@
 import { useEffect, useState } from "react"
-import Quill from "./Quill.jsx";
-import { createNote, getNoteById, updateNote } from "../api/note.api.js"
-import { useNavigate, useParams } from "react-router-dom"
+import Quill from "./Quill.jsx"
+import { createNote, updateNote } from "../api/note.api.js"
 
+export default function TextEditor({ note, onClose, onSave }) {
 
-export default function TextEditor() {
+  const [content, setContent] = useState('')
+  const [title, setTitle] = useState('')
+  const [loading, setLoading] = useState(false)
 
-    const { id } = useParams();
-    const [content, setContent] = useState('')
-    const [title, setTitle] = useState('Note title...')
-    const navigate = useNavigate()
-    const [loading, setLoading] = useState(false)
+  const isEditMode = !!note 
 
-    const isEditMode = !!id
-
-    useEffect(() => {
-        if (isEditMode) {
-            const fetchNote = async () => {
-                try {
-                    const note = await getNoteById(id)
-                    setTitle(note.title)
-                    setContent(note.content)
-                } catch (error) {
-                    console.log(error);
-                }
-            }
-            fetchNote()
-        }
-    }, [id])
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setLoading(true);
-
-        try {
-
-            if (isEditMode) {
-                await updateNote(id, title, content)
-            }
-            else {
-                await createNote(title, content)
-            }
-
-            console.log(data);
-            navigate('/dashboard')
-
-
-
-        } catch (error) {
-            console.log(error.response?.data);
-
-        }
-        finally {
-            setLoading(false)
-
-        }
+  // fill editor when note prop changes
+  useEffect(() => {
+    if (note) {
+      setTitle(note.title)    
+      setContent(note.content) 
+    } else {
+      setTitle('')
+      setContent('')
     }
+  }, [note])
 
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setLoading(true)
 
-    return (
-        <div className="p-6">
+    try {
+      if (isEditMode) {
+        await updateNote(note._id, title, content)  
+      } else {
+        await createNote(title, content)
+      }
 
-            {/* title  */}
-            <label >Title</label>
-            <input type="text"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)} />
+      onSave()   
+      onClose()  
 
+    } catch (error) {
+      console.log(error.response?.data)
+    } finally {
+      setLoading(false)
+    }
+  }
 
-            {/* editor  */}
-            <Quill value={content} onChange={setContent} />
+  return (
+    <div className="flex flex-col h-full bg-journal-secondary border-l border-journal-border font-sans antialiased text-journal-text-primary">  
 
+      
+      <div className="flex items-center justify-between px-6 py-4 border-b border-journal-border shrink-0 select-none">
+        <span className="font-sans text-[10px] uppercase tracking-widest font-semibold text-journal-text-secondary">
 
-            <div className="my-4 flex items-center justify-center">
-                <button onClick={handleSubmit}
-                    disabled={loading} className="text-(--color-heading) py-2 px-4 rounded border-1">
-                    {loading ? 'Saving...' : isEditMode ? 'Save Changes' : 'Create'}</button>
-            </div>
-        </div>
+        </span>
+        <button 
+          onClick={onClose} 
+          className="text-journal-text-secondary hover:text-journal-accent text-sm p-1 transition-colors cursor-pointer"
+          title="Close Workspace"
+        >
+          ✕
+        </button>
+      </div>
 
-    )
+      
+      <input
+        type="text"
+        placeholder="Untitled Canvas..."
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+        className="w-full px-6 py-4 bg-transparent font-serif text-2xl font-medium tracking-tight text-journal-text-primary outline-none border-b border-journal-border/50 placeholder-journal-text-secondary/30"
+      />
+
+      
+      <div className="flex-1 overflow-y-auto p-6 font-sans font-light text-base leading-relaxed notion-editor-glow">
+        <Quill value={content} onChange={setContent} />
+      </div>
+
+    
+      <div className="flex items-center justify-center px-6 py-4 border-t border-journal-border bg-journal-primary/30 shrink-0">
+        <button
+          onClick={handleSubmit}
+          disabled={loading}
+          className=" py-3 bg-white hover:bg-journal-accent-hover text-journal-primary font-sans text-xs uppercase tracking-widest font-semibold transition-all shadow-journal-btn disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer rounded-none"
+        >
+          {loading ? 'Transmitting Data...' : note ? 'Commit Changes' : 'Initialize Note'}
+        </button>
+      </div>
+
+    </div>
+  )
 }

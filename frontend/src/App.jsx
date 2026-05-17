@@ -4,6 +4,7 @@ import TextEditor from "./components/TextEditor";
 import Dashboard from "./pages/Dashboard";
 import Home from "./pages/Home";
 import NoteCard from "./components/NoteCard";
+import UserProfile from "./pages/UserProfile";
 
 
 export default function App() {
@@ -15,6 +16,7 @@ export default function App() {
                 <Route path="/notes/new" element={<TextEditor />} />
                 <Route path="/notes/edit/:id" element={<TextEditor />} />
                 <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/profile" element={<UserProfile />} />
             </Routes>
         </BrowserRouter>
       

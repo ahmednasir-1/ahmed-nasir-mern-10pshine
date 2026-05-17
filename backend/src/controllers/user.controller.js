@@ -1,12 +1,12 @@
 import { User } from "../models/user.model.js";
 import isEmail from "validator/lib/isEmail.js"
 import logger from "../configs/logger.js";
-import jwt from 'jsonwebtoken' ;
+import jwt from 'jsonwebtoken';
 import crypto from 'crypto'
 import { sendEmailToUser } from "../configs/email.js";
 
-const generateToken = (id) =>{
-    return jwt.sign({id}, process.env.JWT_SECRET, {
+const generateToken = (id) => {
+    return jwt.sign({ id }, process.env.JWT_SECRET, {
         expiresIn: '1d'
     })
 }
@@ -17,12 +17,11 @@ const registerUser = async (req, res) => {
     try {
 
         console.log('request body, ', req.body);
-        
+
         const { name, email, password } = req.body;
 
         // validation
-        if (!name || !email || !password)
-        {
+        if (!name || !email || !password) {
 
             logger.warn("User Registration Failed - Missing Fields");
             return res.status(400).json({
@@ -32,12 +31,11 @@ const registerUser = async (req, res) => {
 
 
         // check if email format is valid
-        if(!isEmail(email))
-        {
+        if (!isEmail(email)) {
             logger.warn("User Registration Failed - Invalid Email format");
-            return res.status(400).json({message : "Email format is invalid"})
+            return res.status(400).json({ message: "Email format is invalid" })
         }
-        
+
         // check if user exists
         const existing = await User.findOne({ email: email.toLowerCase() });
         if (existing) {
@@ -64,7 +62,7 @@ const registerUser = async (req, res) => {
         await sendEmailToUser(newUser.email, token)
 
         logger.info(`User Registration Success - ${email}`);
-        res.status(201).json({ mesasge: "Registration Success! Please check your email to activate your account"   });
+        res.status(201).json({ mesasge: "Registration Success! Please check your email to activate your account" });
 
     } catch (error) {
 
@@ -73,29 +71,28 @@ const registerUser = async (req, res) => {
     }
 }
 
-const verifyEmail = async (req, res) =>{
+const verifyEmail = async (req, res) => {
 
     try {
-        
-    
-    const {token} = req.params;
 
-    const user = await User.findOne({verificationToken: token})
 
-    if(!user)
-    {
-        return res.status(400).json({message: "User doensot exist"})
-    }
+        const { token } = req.params;
 
-    user.verificationToken = null;
-    user.isVerified = true;
-    await user.save()
+        const user = await User.findOne({ verificationToken: token })
 
-    logger.info(`Email Verified - ${user.email}`)
+        if (!user) {
+            return res.status(400).json({ message: "User doensot exist" })
+        }
+
+        user.verificationToken = null;
+        user.isVerified = true;
+        await user.save()
+
+        logger.info(`Email Verified - ${user.email}`)
 
     } catch (error) {
         logger.error(`Email Verification Failed - Server Error ${error}`)
-        res.status(500).json({message: "Internal server error - verificaton failed"})
+        res.status(500).json({ message: "Internal server error - verificaton failed" })
     }
 }
 
@@ -111,10 +108,9 @@ const loginUser = async (req, res) => {
             return res.status(400).json({ message: "User doesnot exist" });
         }
 
-        if(!user.isVerified)
-        {
+        if (!user.isVerified) {
             logger.info(`User Login Failed - Email doesnot verified ${email}`)
-            return res.status(400).json({message: "Please verify your email first!"})
+            return res.status(400).json({ message: "Please verify your email first!" })
         }
 
 
@@ -127,12 +123,12 @@ const loginUser = async (req, res) => {
 
 
         logger.info(`User Login Success -  ${email}`);
-        res.status(200).json({ 
+        res.status(200).json({
             _id: user._id,
             name: user.name,
             email: user.email,
             token: generateToken(user._id)
-     
+
         })
 
     }
@@ -143,4 +139,82 @@ const loginUser = async (req, res) => {
 
 }
 
-export { registerUser, loginUser, verifyEmail };
+const getProfile = async (req, res) => {
+    try {
+        const user = await User.findById(req.user._id).select('-password')
+        if (!user) {
+            logger.info(`User Get Profile FAiled - user not found`);
+            return res.status(400).json({ message: "User not found" })
+        }
+
+        logger.info(`User Get Profile Success`);
+        res.status(200).json(user)
+    } catch (error) {
+        logger.warn(`User Get Profile Error - ${error.message}`);
+        res.status(500).json({ message: "Internal Server Error" });
+
+    }
+}
+
+const updateProfile = async (req, res) => {
+    try {
+
+        const { name } = req.body
+
+        const user = await User.findById(req.user._id)
+
+        if (!user) {
+            logger.info(`User Update Profile Failed - User not found`);
+            return res.status(400).json({ message: "User not found" })
+        }
+
+        user.name = name
+
+        await user.save()
+
+        logger.info(`User Update Profile Success`);
+        res.status(200).json({
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+
+
+        })
+    } catch (error) {
+        logger.warn(`User Update Profile Error - ${error.message}`);
+        res.status(500).json({ message: "Internal Server Error" });
+
+    }
+}
+
+const changePassword = async (req, res) => {
+    try {
+
+        const { currentPassword, newPassword } = req.body
+        const user = await User.findById(req.user._id)
+
+        if (!user) {
+            logger.info(`User Update Password Failed - User Not Found ${user}`)
+            return res.status(400).json({ message: "User not found" })
+
+        }
+        const isMatch = await user.comparePassword(currentPassword)
+        if (!isMatch) {
+            logger.info(`User Update Password Failed - Password not Matched ${user}`)
+            return res.status(400).json({ message: "Password not match" })
+        }
+
+        user.password = newPassword
+        await user.save()
+
+        logger.info(`User Update Password Suceess- Password Changed ${user}`)
+        res.status(200).json({ message: "Password changed successfuly" })
+
+    } catch (error) {
+        logger.warn(`User Update Password Error - ${error.message}`);
+        res.status(500).json({ message: "Internal Server Error" });
+
+    }
+}
+
+export { registerUser, loginUser, verifyEmail, changePassword, getProfile, updateProfile };

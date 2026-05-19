@@ -66,13 +66,66 @@ export const getNoteById = async (id) => {
 }
 
 //delete a note by id
-export const delNote = async (id) => {
+// export const delNote = async (id) => {
+//     const token = localStorage.getItem('token')
+//     const del = await axios.delete(`${BASE_URL}/delete/${id}`,
+//         {
+//             headers: {
+//                 Authorization: `${token}`
+//             }
+//         }
+//     )
+// }
+
+export const togglePin = async (id) =>{
     const token = localStorage.getItem('token')
-    const del = await axios.delete(`${BASE_URL}/delete/${id}`,
-        {
-            headers: {
-                Authorization: `${token}`
-            }
+    const res = await axios.put(`${BASE_URL}/pin/${id}`, {}, {
+        headers:{
+            Authorization: `${token}`
         }
-    )
+    })
+    return res.data
+}
+
+export const getTrashNotes = async () =>{
+    const token = localStorage.getItem('token')
+    const res = await axios.get(`${BASE_URL}/trash`, {
+        headers:{
+            Authorization: `${token}`
+        }
+    })
+    return res.data
+}
+
+export const moveToTrash = async (id) =>{
+    const token = localStorage.getItem('token')
+    const res = await axios.delete(`${BASE_URL}/trash/${id}`, {
+        headers:{
+            Authorization: `${token}`
+        }
+    })
+    // return res.data
+}
+
+export const restoreNotes = async (id) =>{
+    const token = localStorage.getItem('token')
+    const res = await axios.put(`${BASE_URL}/restore/${id}`, {}, {
+        headers:{
+            Authorization: `${token}`
+        }
+    })
+    return res.data
+}
+
+export const permanentDelNote = async (id) =>{
+    const token = localStorage.getItem('token')
+
+    console.log("FE permanen del is" ,id);
+    
+    const res = await axios.delete(`${BASE_URL}/permanent/${id}`, {
+        headers:{
+            Authorization: `${token}`
+        }
+    })
+    return res.data
 }

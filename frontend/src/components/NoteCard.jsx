@@ -2,8 +2,11 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { BiEdit } from "react-icons/bi";
 import { MdDeleteOutline } from "react-icons/md";
+import { LuPin } from "react-icons/lu";
+import { LuPinOff } from "react-icons/lu";
+import { MdOutlineRestore } from "react-icons/md";
 
-function NoteCard({ note, onDelete, onDoubleClick }) {
+function NoteCard({ note, onDelete, onDoubleClick, onPin, onRestore, isTrash}) {
   // const [showMenu, setShowMenu] = useState(false)
   const navigate = useNavigate('')
 
@@ -33,12 +36,12 @@ function NoteCard({ note, onDelete, onDoubleClick }) {
     >
 
       <h3 className="font-serif text-lg font-medium text-journal-text-primary leading-tight pr-6 group-hover:text-journal-accent transition-colors">
-        {note.title || "Untitled Canvas"}
+        {note.title }
       </h3>
 
 
       <p className="font-sans font-light text-xs text-journal-text-secondary leading-relaxed line-clamp-3 mt-2 mb-4">
-        {stripHtml(note.content) || "No additional content..."}
+        {stripHtml(note.content) }
       </p>
 
 
@@ -49,32 +52,91 @@ function NoteCard({ note, onDelete, onDoubleClick }) {
       </div>
 
 
+
+
+      {/* note buttons  */}
       <div className="absolute right-3 top-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
 
-        {/* edit button  */}
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            navigate(`/notes/edit/${note._id}`);
-          }}
-          className="p-1.5 bg-journal-primary border border-journal-border text-journal-text-secondary hover:text-journal-accent hover:border-journal-accent/30 transition-colors cursor-pointer"
-          title="Edit Entry"
-        >
-          <BiEdit className="w-4 h-4" />
-        </button>
 
-        {/* delete button  */}
-        <button
-          onClick={() => onDelete(note._id)}
-          className="p-1.5 bg-journal-primary border border-journal-border text-journal-text-secondary hover:text-journal-accent hover:border-journal-accent/30 transition-colors cursor-pointer"
-        >
-          <MdDeleteOutline />
+        {/* Normal Mode Buttons */}
+        {!isTrash && (
+          <div className="flex gap-2 mt-2">
 
-        </button>
+            {/* Pin/Unpin Button */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                onPin(note._id)
+              }}
+              className="p-1.5 bg-journal-primary border border-journal-border text-journal-text-secondary hover:text-journal-accent hover:border-journal-accent/30 transition-colors cursor-pointer"
+              title={note.isPinned ? 'Unpin' : 'Pin'}
+            >
+              {note.isPinned
+                ? <LuPinOff className="w-4 h-4" />   
+                : <LuPin className="w-4 h-4" />       
+              }
+            </button>
+
+            {/* Edit Button */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                navigate(`/notes/edit/${note._id}`)
+              }}
+              className="p-1.5 bg-journal-primary border border-journal-border text-journal-text-secondary hover:text-journal-accent hover:border-journal-accent/30 transition-colors cursor-pointer"
+              title="Edit"
+            >
+              <BiEdit className="w-4 h-4" />
+            </button>
+
+            {/* Delete Button */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                onDelete(note._id)
+              }}
+              className="p-1.5 bg-journal-primary border border-journal-border text-journal-text-secondary hover:text-journal-accent hover:border-journal-accent/30 transition-colors cursor-pointer"
+              title="Delete"
+            >
+              <MdDeleteOutline className="w-4 h-4" />
+            </button>
+
+          </div>
+        )}
+
+        {/* Trash Mode Buttons */}
+        {isTrash && (
+          <div className="flex gap-2 mt-2">
+
+            {/* Restore Button */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                onRestore(note._id)
+              }}
+              className="p-1.5 bg-journal-primary border border-journal-border text-journal-text-secondary hover:text-journal-accent hover:border-journal-accent/30 transition-colors cursor-pointer"
+              title="Restore"
+            >
+              <MdOutlineRestore className="w-4 h-4" />
+            </button>
+
+            {/* Permanent Delete Button */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                onDelete(note._id)
+              }}
+              className="p-1.5 bg-journal-primary border border-journal-border text-journal-text-secondary hover:text-journal-accent hover:border-journal-accent/30 transition-colors cursor-pointer"
+              title="Delete Permanently"
+            >
+              <MdDeleteOutline className="w-4 h-4" />
+            </button>
+
+          </div>
+        )}
       </div>
     </div>
-  );
-
+  )
 }
 
 export default NoteCard

@@ -3,7 +3,7 @@ import Sidebar from '../components/Sidebar'
 import Navbar from '../components/Navbar'
 import NoteCard from '../components/NoteCard'
 import TextEditor from '../components/TextEditor'
-import { delNote, getAllNotes } from '../api/note.api'
+import { getAllNotes, moveToTrash, togglePin } from '../api/note.api'
 
 function Dashboard() {
 
@@ -45,10 +45,12 @@ function Dashboard() {
 
   const handleDelete = async (noteId) => {
     try {
-      await delNote(noteId)
+      await moveToTrash(noteId)
+
       setNotes(notes.filter((note) => note._id !== noteId))
+
     } catch (error) {
-      console.log('failed to delete note')
+      console.log('failed delete note')
     }
   }
 
@@ -56,6 +58,15 @@ function Dashboard() {
     note.title.toLowerCase().includes(search.toLowerCase())
   )
 
+  const handlePin = async (noteId) => {
+    try {
+      await togglePin(noteId)
+
+      setNotes(notes.map((note) => note._id === noteId ? { ...note, isPinned: !note.isPinned } : note))
+    } catch (error) {
+
+    }
+  }
   return (
     <div className="flex h-screen bg-primary text-text-primary font-sans antialiased selection:bg-accent selection:text-primary">
 
@@ -97,14 +108,51 @@ function Dashboard() {
                 </div>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {filteredNotes.map((note) => (
-                    <NoteCard
-                      key={note._id}
-                      note={note}
-                      onDoubleClick={() => handleEditNote(note)}
-                      onDelete={handleDelete}
-                    />
-                  ))}
+
+                  {/* pinned section  */}
+
+                  {filteredNotes.some((note) => note.isPinned) && (
+                    <>
+                      <div className="col-span-full">
+                        <p className='text-xs text-gray-400 uppercase tracking-widest font-medium mb-2'>Pinned Notes</p>
+                      </div>
+                      {filteredNotes.filter((note) => note.isPinned).map((note) => (
+                        <NoteCard
+                          key={note._id}
+                          onDelete={handleDelete}
+                          onPin={handlePin}
+                          onDoubleClick={() => handleEditNote(note)}
+                          note={note} 
+                          isTrash={false}/>
+                      ))
+
+                      }
+                    </>
+                  )
+
+                  }
+
+                  {/* other notes  */}
+                  {filteredNotes.some((note) => !note.isPinned) && (
+                    <>
+                      <div className="col-span-full">
+                        <p className='text-xs text-gray-400 uppercase tracking-widest font-medium mb-2'>Unpinned Notes</p>
+                      </div>
+                      {filteredNotes.filter((note) => !note.isPinned).map((note) => (
+                        <NoteCard
+                          key={note._id}
+                          onDelete={handleDelete}
+                          onPin={handlePin}
+                          onDoubleClick={() => handleEditNote(note)}
+                          note={note} />
+                      ))
+
+                      }
+                    </>
+                  )
+
+                  }
+
                 </div>
               )}
             </div>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import Quill from "./Quill.jsx"
 import { createNote, updateNote } from "../api/note.api.js"
+import { RxCrossCircled } from "react-icons/rx";
 
 export default function TextEditor({ note, onClose, onSave }) {
 
@@ -52,10 +53,10 @@ export default function TextEditor({ note, onClose, onSave }) {
         </span>
         <button 
           onClick={onClose} 
-          className="text-journal-text-secondary hover:text-journal-accent text-sm p-1 transition-colors cursor-pointer"
+          className="px-3 py-3 text-journal-text-secondary hover:text-journal-accent text-sm p-1 transition-colors cursor-pointer"
           title="Close Workspace"
         >
-          ✕
+          <RxCrossCircled />
         </button>
       </div>
 
@@ -78,7 +79,7 @@ export default function TextEditor({ note, onClose, onSave }) {
         <button
           onClick={handleSubmit}
           disabled={loading}
-          className=" py-3 bg-white hover:bg-journal-accent-hover text-journal-primary font-sans text-xs uppercase tracking-widest font-semibold transition-all shadow-journal-btn disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer rounded-none"
+          className=" px-3 py-3 bg-white hover:bg-accent text-primary font-sans text-xs uppercase tracking-widest font-semibold transition-all shadow-btn disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer rounded-none"
         >
           {loading ? 'Transmitting Data...' : note ? 'Commit Changes' : 'Initialize Note'}
         </button>

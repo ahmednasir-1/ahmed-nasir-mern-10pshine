@@ -5,6 +5,7 @@ import Dashboard from "./pages/Dashboard";
 import Home from "./pages/Home";
 import NoteCard from "./components/NoteCard";
 import UserProfile from "./pages/UserProfile";
+import Trash from "./pages/Trash";
 
 
 export default function App() {
@@ -17,6 +18,7 @@ export default function App() {
                 <Route path="/notes/edit/:id" element={<TextEditor />} />
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/profile" element={<UserProfile />} />
+                <Route path="/trash" element={<Trash />} />
             </Routes>
         </BrowserRouter>
       

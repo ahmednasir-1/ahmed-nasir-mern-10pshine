@@ -2,24 +2,36 @@ import mongoose, { Schema } from "mongoose";
 
 const noteSchema = new Schema(
     {
-        user:{
+        user: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User',
             required: true
         },
-        title:{
+        title: {
             type: String,
             required: true,
             minLength: 1,
             maxLength: 1000
         }
-,
-        content:{
+        ,
+        content: {
             type: String,
             required: true,
             minLength: 1,
             maxLength: 1000
 
+        },
+        isPinned: {
+            type: Boolean,
+            default: false
+        },
+        isDeleted: {
+            type: Boolean,
+            default: false
+        },
+        deletedAt: {
+            type: Date,
+            default: null
         }
     },
     {

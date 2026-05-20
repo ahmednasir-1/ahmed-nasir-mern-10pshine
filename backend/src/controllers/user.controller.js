@@ -62,7 +62,7 @@ const registerUser = async (req, res) => {
         await sendEmailToUser(newUser.email, token)
 
         logger.info(`User Registration Success - ${email}`);
-        res.status(201).json({ mesasge: "Registration Success! Please check your email to activate your account" });
+        res.status(201).json({ message: "Registration Success! Please check your email to activate your account" });
 
     } catch (error) {
 
@@ -102,6 +102,11 @@ const loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
 
+        if(!email || !password)
+        {
+            return res.status(400).json({message: "All fields are required"})
+        }
+        
         const user = await User.findOne({ email: email.toLowerCase() });
         if (!user) {
             logger.warn(`User Login Failed - Email doesnot exist ${email}`);

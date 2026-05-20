@@ -4,13 +4,13 @@ import jwt from "jsonwebtoken";
 
 const protect = async (req, res, next) => {
 
-    
+
     try {
         const token = req.headers.authorization;
 
         if (!token) {
             logger.warn("Request Failed - No token Found")
-            res.status(400).json({ message: "No token" })
+            return res.status(400).json({ message: "No token" })
         }
 
         // verify token
@@ -18,6 +18,10 @@ const protect = async (req, res, next) => {
 
         // find user from token
         req.user = await User.findById(verify.id).select('-password');
+
+        if (!req.user) {
+            return res.status(401).json({ message: "User not found" });
+        }
         logger.info("Request Success - Token Verified")
         next();
 

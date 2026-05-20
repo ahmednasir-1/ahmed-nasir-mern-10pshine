@@ -5,8 +5,6 @@ import logger from "../configs/logger.js";
 const createNote = async (req, res) => {
     try {
 
-        console.log(req);
-
         const { title, content } = req.body;
 
         if (!title || !content) {
@@ -14,7 +12,7 @@ const createNote = async (req, res) => {
             return res.status(400).json({ message: "Title and content is required" })
         }
 
-        await Note.create(
+        const note = await Note.create(
             {
                 title, content,
                 user: req.user._id
@@ -22,7 +20,7 @@ const createNote = async (req, res) => {
         );
 
         logger.info("Note Create Success");
-        res.status(201).json({ message: "Note created successfully" });
+        res.status(201).json({ message: "Note created successfully", note });
 
     } catch (error) {
         logger.error(`Note Create Failed - ${error.mesasge}`);
@@ -92,11 +90,11 @@ const updateNote = async (req, res) => {
 
         if (!note) {
             logger.warn("Note Updation Failed - Note not found");
-            res.status(400).json({ message: "Note not foudn" })
+            return res.status(400).json({ message: "Note not foudn" })
         }
 
         logger.info("Note Updation Success")
-        res.status(200).json({ message: "Note updated" }, note)
+        res.status(200).json({ message: "Note updated" , note})
     }
     catch (error) {
         logger.error("Note Updation Error ")
@@ -116,7 +114,7 @@ const delNote = async (req, res) => {
 
         if (!note) {
             logger.warn("Note Deletion Failed - Note not found");
-            res.status(400).json({ message: "Note not found" })
+            return res.status(400).json({ message: "Note not found" })
         }
 
         logger.info("Note Deletion Success")

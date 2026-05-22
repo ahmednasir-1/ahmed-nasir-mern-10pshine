@@ -12,6 +12,7 @@ function Dashboard() {
   const [showEditor, setShowEditor] = useState(false)
   const [selectedNote, setSelectedNote] = useState(null)
   const [search, setSearch] = useState('')
+  const [showSidebar, setShowSidebar] = useState(false)
 
   const handleCreateNote = () => {
     setSelectedNote(null)
@@ -70,8 +71,6 @@ function Dashboard() {
   return (
     <div className="flex h-screen bg-primary text-text-primary font-sans antialiased selection:bg-accent selection:text-primary">
 
-      <Sidebar />
-
       <div className="flex flex-col flex-1 overflow-hidden">
 
         <Navbar
@@ -79,7 +78,11 @@ function Dashboard() {
           setSearch={setSearch}
           onCreateNote={handleCreateNote}
           showEditor={showEditor}
+          setShowSidebar={setShowSidebar}
         />
+
+        {/* siebar  */}
+        <Sidebar showSidebar={showSidebar}/>
 
         {/* Notes Grid */}
         <div className="flex-1 overflow-hidden">
@@ -122,8 +125,8 @@ function Dashboard() {
                           onDelete={handleDelete}
                           onPin={handlePin}
                           onDoubleClick={() => handleEditNote(note)}
-                          note={note} 
-                          isTrash={false}/>
+                          note={note}
+                          isTrash={false} />
                       ))
 
                       }

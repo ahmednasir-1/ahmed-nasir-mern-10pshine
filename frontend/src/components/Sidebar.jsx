@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 
-function Sidebar() {
+function Sidebar({showSidebar}) {
   const location = useLocation()
   const navigate = useNavigate()
 
@@ -38,7 +38,10 @@ function Sidebar() {
   ]
 
   return (
-    <div className="w-64 bg-secondary border-r border-border flex flex-col h-full p-8 shrink-0 select-none">
+    // <div className="w-64 bg-secondary border-r border-border flex flex-col h-full p-8 shrink-0 select-none">
+    <div className={`fixed flex flex-col top-16 left-0 p-8 w-64 bg-secondary text-white
+  h-[calc(100vh-4rem)] transition-transform duration-300
+  ${showSidebar ? "translate-x-0" : "-translate-x-full"}`}>
 
 
       {/* Nav */}
@@ -48,8 +51,8 @@ function Sidebar() {
             key={item.path}
             to={item.path}
             className={`flex items-center gap-2.5 transition-colors ${location.pathname === item.path
-                ? 'font-medium text-text-primary'
-                : 'text-text-secondary hover:text-text-primary'
+              ? 'font-medium text-text-primary'
+              : 'text-text-secondary hover:text-text-primary'
               }`}
           >
             {location.pathname === item.path && (
@@ -89,6 +92,8 @@ function Sidebar() {
       </div>
 
     </div>
+
+
   )
 }
 

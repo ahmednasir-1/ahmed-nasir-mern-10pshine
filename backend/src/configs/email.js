@@ -33,10 +33,32 @@ export const sendEmailToUser = async (userEmail, token) => {
             <a href="${link}">Activate Account</a>`,
         });
 
-        logger.info(`Email sent to User's Email = ${userEmail}`)
+        logger.info(`Verification Email sent to User's Email = ${userEmail}`)
         
     } catch (err) {
-        logger.error(`Email sent Failed - ${err.message}`)
+        logger.error(`Verification Email sent Failed - ${err.message}`)
+
+    }
+}
+
+export const forgotPasswordEmail = async (userEmail, token) => {
+
+    try {
+
+        const link = `http://localhost:5173/reset-password/${token}`
+        await transporter.sendMail({
+            from: process.env.EMAIL ,
+            to: userEmail,
+            subject: "Reset Password",
+            html: `<b>Click this link to reset your password</b>
+            <br/>
+            <a href="${link}">Reset Password</a>`,
+        });
+
+        logger.info(`Forgot Email sent to User's Email = ${userEmail}`)
+        
+    } catch (err) {
+        logger.error(`Forgot Email sent Failed - ${err.message}`)
 
     }
 }

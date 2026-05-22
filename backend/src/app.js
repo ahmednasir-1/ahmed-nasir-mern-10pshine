@@ -2,6 +2,7 @@ import express from "express";
 import userRouter from "./routes/user.route.js"
 import noteRouter from "./routes/note.route.js"
 import cors from 'cors';
+import "./configs/autoDelete.js"
 
 
 

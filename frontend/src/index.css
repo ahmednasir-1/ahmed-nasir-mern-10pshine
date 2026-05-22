@@ -36,3 +36,35 @@
 .ql-editor {
   border: none !important;
 }
+
+/* Dropdown background */
+.ql-toolbar .ql-picker-options {
+  background-color: #1c1f2b !important;
+  border: 0.5px solid rgba(255,255,255,0.1) !important;
+}
+
+/* Dropdown items text color */
+.ql-toolbar .ql-picker-options .ql-picker-item {
+  color: white !important;
+}
+
+/* Dropdown item hover */
+.ql-toolbar .ql-picker-options .ql-picker-item:hover {
+  color: #c9a96e !important;
+  background-color: rgba(255,255,255,0.05) !important;
+}
+
+/* The selected label text (e.g. "Normal") */
+.ql-toolbar .ql-picker-label {
+  color: white !important;
+}
+
+/* The dropdown arrow icon */
+.ql-toolbar .ql-picker-label .ql-stroke {
+  stroke: white !important;
+}
+
+/* Selected/active item */
+.ql-toolbar .ql-picker-options .ql-picker-item.ql-selected {
+  color: #c9a96e !important;
+}

@@ -1,10 +1,22 @@
-export default function Navbar({ search, setSearch, onCreateNote, showEditor }) {
+import { useState } from "react"
+import { GiHamburgerMenu } from "react-icons/gi";
+import Sidebar from "./Sidebar";
 
+export default function Navbar({ search, setSearch, onCreateNote, showEditor, setShowSidebar, showSidebar }) {
+
+  
   return (
+
+
     <div className="h-16 bg-secondary border-b border-border flex items-center justify-between px-12 shrink-0">
 
-
       <div className="flex items-center space-x-4">
+
+        <GiHamburgerMenu 
+        className="cursor-pointer"
+        onClick={() => setShowSidebar(prev => !prev)} />
+        
+
         <span className="font-sans text-xs uppercase tracking-widest text-text-secondary">
           Notes Application
         </span>

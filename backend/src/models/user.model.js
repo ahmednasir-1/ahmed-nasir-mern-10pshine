@@ -36,6 +36,14 @@ const userSchema = new Schema(
         verificationToken: {
             type: String,
             default: null
+        },
+          resetPasswordToken:{
+            type: String,
+            default: null
+        },
+        resetPasswordTokenExpiry:{
+            type: String,
+            default: null
         }
     },
     {

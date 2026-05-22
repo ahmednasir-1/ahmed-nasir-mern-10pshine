@@ -3,7 +3,7 @@ import isEmail from "validator/lib/isEmail.js"
 import logger from "../configs/logger.js";
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto'
-import { sendEmailToUser } from "../configs/email.js";
+import { forgotPasswordEmail, sendEmailToUser } from "../configs/email.js";
 
 const generateToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -222,4 +222,70 @@ const changePassword = async (req, res) => {
     }
 }
 
-export { registerUser, loginUser, verifyEmail, changePassword, getProfile, updateProfile };
+const forgotPassword = async (req, res) => {
+    try {
+
+        const { email } = req.body
+        const user = await User.findOne({email})
+
+        if (!user) {
+            logger.info(`User Forgot Password Failed - User Not Found ${user}`)
+            return res.status(400).json({ message: "User not found" })
+
+        }
+      
+
+        const token = crypto.randomBytes(32).toString('hex')
+        const expiry = Date.now() + 3600000; // 1 hour
+       
+        user.resetPasswordToken = token, 
+        user.resetPasswordTokenExpiry = expiry
+        await user.save()
+        await forgotPasswordEmail(email.toLowerCase(), token)
+        
+
+        logger.info(`User forgot Password Suceess- Email Sent ${user}`)
+        res.status(200).json({ message: "Please check your email" })
+
+    } catch (error) {
+        logger.warn(`User forgot Password Error - ${error.message}`);
+        res.status(500).json({ message: "Internal Server Error" });
+
+    }
+}
+
+
+const resetPassword = async (req, res) => {
+    try {
+
+        const { token, newPassword } = req.body
+
+        const user = await User.findOne({
+            resetPasswordToken: token,
+            resetPasswordTokenExpiry: { $gt: Date.now() }
+        })
+
+        if (!user) {
+            logger.info(`User Reset Password Failed - Invalid Token ${user}`)
+            return res.status(400).json({ message: "Invalid Token" })
+
+        }
+       
+        user.password = newPassword
+        user.resetPasswordToken = null
+        user.resetPasswordTokenExpiry = null
+        await user.save()
+        
+
+        logger.info(`User reset Password Suceess ${user}`)
+        res.status(200).json({ message: "Password Changed Successfully" })
+
+    } catch (error) {
+        logger.warn(`User reset Password Error - ${error.message}`);
+        res.status(500).json({ message: "Internal Server Error" });
+
+    }
+}
+
+
+export { registerUser, loginUser, verifyEmail, changePassword, getProfile, updateProfile, forgotPassword, resetPassword };

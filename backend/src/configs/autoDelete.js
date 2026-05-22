@@ -1,22 +1,22 @@
 import cron from 'node-cron'
-import Note from "../models/note.model.js"
+import { Note } from "../models/note.model.js"
 
-// delete notes permanently after 5 minutes 
-cron.schedule('*/5 * * * *', async () =>{
+// delete notes permanently after 30 days
+cron.schedule('* * * * *', async () => {
     try {
-        const fiveMinutesAgo = new Date()
-        fiveMinutesAgo.setMinutes(fiveMinutesAgo.getMinutes() - 5)
+
+        console.log("cron runnning")
+
+        const time = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
 
         const result = await Note.deleteMany({
             isDeleted: true,
-            deletedAt : {$lte: fiveMinutesAgo}
+            deletedAt: { $lte: time }
         })
 
-        if(result.deletedCount > 0)
-        {
-            console.log("auto deleted notes")
-        }
+
     } catch (error) {
+        logger.error(`Auto Deletion Error - ${error.message}`)
         console.log("auto delete error", error.message)
     }
 })

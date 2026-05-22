@@ -82,7 +82,9 @@ function SignIn() {
           <div>
             <div className="flex justify-between items-center mb-1.5">
               <label className="block text-[10px] uppercase tracking-widest font-semibold text-text-primary">Password</label>
-              <a href="#" className="text-[10px] uppercase tracking-wider text-text-secondary hover:text-accent transition-colors">Forgot Password?</a>
+
+              <Link to="/forgot-password" className="text-[10px] uppercase tracking-wider text-text-secondary hover:text-accent transition-colors">Forgot Password?</Link>
+
             </div>
             <input
               type="password"

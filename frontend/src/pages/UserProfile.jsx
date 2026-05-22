@@ -65,18 +65,21 @@ export default function UserProfile() {
         setError('')
         setMessage('')
 
-        if (newPassword != confirmPassword) {
-            setError("Passwords do not Match")
-            setLoading(false)
-        }
 
         try {
-            await changePassword(currPassword, newPassword)
+            if (newPassword != confirmPassword) {
+                setError("Passwords do not Match")
+                setError('')
+                setLoading(false)
+            }
+            else {
 
-            setCurrPassword('')
-            setNewPassword('')
-            setConfirmPassword('')
-            setMessage("Password Changed Successfully")
+                await changePassword(currPassword, newPassword)
+                setCurrPassword('')
+                setNewPassword('')
+                setConfirmPassword('')
+                setMessage("Password Changed Successfully")
+            }
         }
         catch {
             setError("something went wrong - password")

@@ -45,11 +45,22 @@ function NoteCard({ note, onDelete, onDoubleClick, onPin, onRestore, isTrash}) {
       </p>
 
 
-      <div className="mt-auto pt-3 border-t border-journal-border/30 flex items-center justify-between">
+{!isTrash? (
+
+  <div className="mt-auto pt-3 border-t border-journal-border/30 flex items-center justify-between">
         <span className="font-sans text-[10px] uppercase tracking-widest text-journal-text-secondary">
           {formatDate(note.createdAt)}
         </span>
       </div>
+):
+(
+
+  <div className="mt-auto pt-3 border-t border-journal-border/30 flex items-center justify-between">
+        <span className="font-sans text-[10px] uppercase tracking-widest text-red-400">
+           {note.daysLeft <= 0 ? 'Deleting soon...': `${note.daysLeft} days left`}
+        </span>
+      </div>
+)}
 
 
 

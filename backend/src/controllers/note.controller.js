@@ -186,18 +186,32 @@ const moveToTrash = async (req, res) => {
 const getTrashNotes = async (req, res) => {
 
     try {
-        const note = await Note.find({
+        const notes = await Note.find({
             user: req.user._id,
             isDeleted: true
         })
 
-        if (!note) {
+        if (!notes) {
              logger.info("Note getTrashNotes Failed - Note not found");
             return res.status(400).json({ message: "note not found" })
         }
 
-         logger.info("Note getTrashNotes Success");
-        res.status(200).json(note)
+        const noteWithDays = notes.map((note) => {
+
+            const deletedAt = new Date(note.deletedAt)
+            const now = new Date()
+            const diffDays = Math.floor((now - deletedAt) / (1000 * 60 * 60 * 24))
+            const daysLeft = 30 - diffDays
+
+            return{
+                ...note.toObject(),
+                daysLeft
+            }
+        })
+
+
+        logger.info("Note getTrashNotes Success");
+        res.status(200).json(noteWithDays)
 
     } catch (error) {
         logger.error(`Note Trashed Failed - ${error}`)

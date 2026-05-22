@@ -8,6 +8,9 @@ export default function Trash() {
 
     const [loading, setLoading] = useState(true)
     const [notes, setNotes] = useState([])
+    const [showSidebar, setShowSidebar] = useState(false);
+
+
     useEffect(() => {
         fetchTrashNotes()
     }, [])
@@ -15,7 +18,7 @@ export default function Trash() {
     const fetchTrashNotes = async () => {
         try {
             const data = await getTrashNotes()
-             setNotes(Array.isArray(data) ? data : []) 
+            setNotes(Array.isArray(data) ? data : [])
 
         } catch (error) {
             console.log(error)
@@ -30,7 +33,7 @@ export default function Trash() {
     const handleRestore = async (id) => {
         try {
             const notes = await restoreNotes(id)
-             setNotes((prev) => prev.filter((note) => note._id !== id))
+            setNotes((prev) => prev.filter((note) => note._id !== id))
         } catch (error) {
             console.log(error)
         }
@@ -48,9 +51,12 @@ export default function Trash() {
     }
     return (
         <div className="flex h-screen bg-primary text-text-primary font-sans antialiased selection:bg-accent selection:text-primary">
-            <Sidebar />
+
 
             <div className="flex flex-col flex-1 overflow-hidden">
+                <Navbar setShowSidebar={setShowSidebar}/>
+
+                <Sidebar showSidebar={showSidebar}/>
 
                 {/* Header */}
                 <div className="px-6 py-4 bg-white border-b border-gray-200">
@@ -82,9 +88,9 @@ export default function Trash() {
                                 <NoteCard
                                     key={note._id}
                                     note={note}
-                                    isTrash={true}                              
-                                    onRestore={handleRestore}                   
-                                    onDelete={handlePermanentDel}           
+                                    isTrash={true}
+                                    onRestore={handleRestore}
+                                    onDelete={handlePermanentDel}
                                 />
                             ))}
                         </div>

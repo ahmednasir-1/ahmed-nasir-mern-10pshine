@@ -1,12 +1,13 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 
-function Sidebar({showSidebar}) {
+function Sidebar({ showSidebar }) {
   const location = useLocation()
   const navigate = useNavigate()
 
   const user = JSON.parse(localStorage.getItem('user') || '{}')
 
-  const handleLogout = () => {
+  const handleLogout = (e) => {
+    e.stopPropagation();
     localStorage.removeItem('token')
     localStorage.removeItem('user')
     navigate('/')
@@ -39,8 +40,8 @@ function Sidebar({showSidebar}) {
 
   return (
     // <div className="w-64 bg-secondary border-r border-border flex flex-col h-full p-8 shrink-0 select-none">
-    <div className={`fixed flex flex-col top-16 left-0 p-8 w-64 bg-secondary text-white
-  h-[calc(100vh-4rem)] transition-transform duration-300
+    <div className={`fixed flex flex-col top-16 z-50 left-0 p-8 w-64 bg-secondary text-white
+  h-[calc(100vh-4rem)] transition-transform duration-300 overflow-y-auto
   ${showSidebar ? "translate-x-0" : "-translate-x-full"}`}>
 
 
@@ -66,10 +67,14 @@ function Sidebar({showSidebar}) {
       </nav>
 
       {/* User Area */}
-      <div className="pt-4 border-t border-border flex items-center space-x-3">
+      <div
+        onClick={() => navigate('/profile')}
+        className="pt-4 border-t border-border flex items-center space-x-3">
+
         <div className="w-8 h-8 rounded-none bg-primary border border-border flex items-center justify-center font-serif text-sm font-semibold text-accent shrink-0">
           {user.name?.charAt(0).toUpperCase() || 'U'}
         </div>
+
         <div className="flex-1 min-w-0">
           <p className="text-xs font-medium truncate text-text-primary">
             {user.name || 'User'}
@@ -78,17 +83,23 @@ function Sidebar({showSidebar}) {
             {user.email || ''}
           </p>
         </div>
-        <button
-          onClick={handleLogout}
-          className="text-text-secondary hover:text-text-primary transition-colors shrink-0"
-          title="Logout"
-        >
-          <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-            <polyline points="16 17 21 12 16 7" />
-            <line x1="21" y1="12" x2="9" y2="12" />
-          </svg>
-        </button>
+
+        <div>
+
+          <button
+            onClick={handleLogout}
+            className="text-text-secondary p-4 hover:text-text-primary transition-colors shrink-0"
+            title="Logout"
+          >
+            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+              <polyline points="16 17 21 12 16 7" />
+              <line x1="21" y1="12" x2="9" y2="12" />
+            </svg>
+          </button>
+
+        </div>
+
       </div>
 
     </div>

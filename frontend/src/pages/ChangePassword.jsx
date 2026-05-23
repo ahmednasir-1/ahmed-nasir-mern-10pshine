@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { resetPassword } from "../api/user.api";
 
 export default function ChangePassword() {
@@ -9,11 +9,14 @@ export default function ChangePassword() {
     const [confirmPassword, setConfirmPassword] = useState('')
     const [error, setError] = useState('')
     const [message, setMessage] = useState('')
+    const [loading, setLoading] = useState(false)
+    const navigate = useNavigate('')
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('')
         setMessage('')
+        setLoading(true)
 
         try {
             if (password != confirmPassword) {
@@ -21,11 +24,18 @@ export default function ChangePassword() {
             }
             else {
                 await resetPassword(token, password)
+                setMessage('Password reset successfully!')
+
+                //redirect to login page
+                setTimeout(() => navigate('/'), 2000)
 
             }
 
         } catch (error) {
             setError(error.response?.data?.message || "Something went wrong!")
+        }
+        finally{
+            setLoading(false)
         }
 
     }
@@ -79,8 +89,10 @@ export default function ChangePassword() {
                     <button
                         className="w-full py-3 bg-accent hover:bg-accent-hover text-primary text-xs uppercase tracking-widest font-semibold transition-all shadow-btn cursor-pointer"
                         onClick={handleSubmit}
+                        disabled={loading}
+                        title="Reset Password"
                     >
-                        Reset Password
+                        {loading? 'Loading...' : 'Reset Password'}
                     </button>
                 </form>
 

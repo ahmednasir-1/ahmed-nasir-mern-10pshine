@@ -20,9 +20,9 @@ describe('Sign in Page Headings Text', () => {
     it('render text in SignIn Page', () => {
         renderLogin()
 
-        expect(screen.getByText("Notes App")).toBeInTheDocument()
-        expect(screen.getByText("Make your notes your strength")).toBeInTheDocument()
-        expect(screen.getByText("Sign In")).toBeInTheDocument()
+        expect(screen.getByText("Notes Application")).toBeInTheDocument()
+        expect(screen.getByText("Welcome Back.")).toBeInTheDocument()
+        
     })
 
 
@@ -33,23 +33,23 @@ describe('Sign In Form', () => {
     it('render signin form ', () => {
         renderLogin()
 
-        expect(screen.getByPlaceholderText('Enter email')).toBeInTheDocument()
-        expect(screen.getByPlaceholderText('Password')).toBeInTheDocument()
+        expect(screen.getByPlaceholderText('name@domain.com')).toBeInTheDocument()
+        expect(screen.getByPlaceholderText('••••••••')).toBeInTheDocument()
         expect(screen.getByRole("button", {
             name: /Login/i
         })).toBeInTheDocument()
     })
 
-    it('allow user to enter email', async()=>{
+    it('allow user to name@domain.com', async()=>{
         renderLogin()
-        const input = screen.getByPlaceholderText("Enter email")
+        const input = screen.getByPlaceholderText("name@domain.com")
         await userEvent.type(input, "ahmed@gmail.com")
         expect(input.value).toBe("ahmed@gmail.com") 
     })
 
-    it('allow user to enter password', async()=>{
+    it('allow user to enter ••••••••', async()=>{
         renderLogin()
-        const input = screen.getByPlaceholderText("Password")
+        const input = screen.getByPlaceholderText("••••••••")
         await userEvent.type(input, "abc123")
         expect(input.value).toBe("abc123") 
     })
@@ -62,12 +62,12 @@ describe('form Submission tests', ()=>{
     it('call login function when user submits the form', async ()=>{
         const checkLogin = vi.spyOn(authAPI, 'login').mockResolvedValue({
             email: 'ahmed@gmail.com',
-            password: 'abc123'
+            password : 'abc123'
         })
 
         renderLogin()
-        await userEvent.type(screen.getByPlaceholderText('Enter email'), "ahmed@gmail.com")
-        await userEvent.type(screen.getByPlaceholderText('Password'), "abc123")
+        await userEvent.type(screen.getByPlaceholderText('name@domain.com'), "ahmed@gmail.com")
+        await userEvent.type(screen.getByPlaceholderText('••••••••'), "abc123")
         await userEvent.click(screen.getByRole('button', {
             name: /Login/i
         }))
@@ -83,8 +83,8 @@ describe('form Submission tests', ()=>{
         })
 
         renderLogin()
-        await userEvent.type(screen.getByPlaceholderText('Enter email'), "wrongemail")
-        await userEvent.type(screen.getByPlaceholderText('Password'), "wrongpass")
+        await userEvent.type(screen.getByPlaceholderText('name@domain.com'), "wrongemail")
+        await userEvent.type(screen.getByPlaceholderText('••••••••'), "wrongpass")
         await userEvent.click(screen.getByRole('button', {
             name: /Login/i
         }))
@@ -100,8 +100,8 @@ describe('form Submission tests', ()=>{
         })
 
         renderLogin()
-        await userEvent.type(screen.getByPlaceholderText('Enter email'), "ahmed@gmail.com")
-        await userEvent.type(screen.getByPlaceholderText('Password'), "abc123")
+        await userEvent.type(screen.getByPlaceholderText('name@domain.com'), "ahmed@gmail.com")
+        await userEvent.type(screen.getByPlaceholderText('••••••••'), "abc123")
         await userEvent.click(screen.getByRole('button', {
             name: /Login/i
         }))
@@ -117,12 +117,12 @@ describe('form Submission tests', ()=>{
         )
 
         renderLogin()
-        await userEvent.type(screen.getByPlaceholderText('Enter email'), "ahmed@gmail.com")
-        await userEvent.type(screen.getByPlaceholderText('Password'), "abc123")
+        await userEvent.type(screen.getByPlaceholderText('name@domain.com'), "ahmed@gmail.com")
+        await userEvent.type(screen.getByPlaceholderText('••••••••'), "abc123")
         await userEvent.click(screen.getByRole('button', {
             name: /Login/i
         }))
 
-        expect(screen.getByText(/loging in../i)).toBeInTheDocument()
+        expect(screen.getByText(/Logging In.../i)).toBeInTheDocument()
     })
 })

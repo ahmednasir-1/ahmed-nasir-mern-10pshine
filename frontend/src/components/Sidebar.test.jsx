@@ -85,7 +85,7 @@ describe('Sidebar', () => {
 
     it('should clear local storage when user logouts', async () => {
         renderSidebar()
-        await userEvent.click(screen.getByText(/Logout/i))
+        await userEvent.click(screen.getByRole("button", {name: /Logout/i}))
 
         expect(localStorage.getItem('token')).toBeNull()
         expect(localStorage.getItem('user')).toBeNull()

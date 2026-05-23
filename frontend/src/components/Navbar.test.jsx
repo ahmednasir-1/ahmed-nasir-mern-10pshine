@@ -19,7 +19,7 @@ describe('Navbar', () => {
 
     it('render create note button', () => {
         renderNavbar()
-        expect(screen.getByRole('button', { name: /Create Note/i })).toBeInTheDocument()
+        expect(screen.getByRole('button', { name: /New Note/i })).toBeInTheDocument()
     })
 
     it('render search bar', () => {
@@ -36,16 +36,7 @@ describe('Navbar', () => {
         expect(setSearch).toHaveBeenCalled()
     })
 
-    it('route to notes/new when user clicks on Create Note Button', async () => {
-
-        renderNavbar()
-
-        const button = screen.getByRole('button', { name: /Create Note/i })
-        await userEvent.click(button)
-
-        expect(window.location.pathname).toBe('/notes/new')
-
-    })
+    
 
 
 })

@@ -19,7 +19,8 @@ describe('Sign Up Page Headings Text', () => {
 
     it('render text in SignUp Page', () => {
         renderSignUp()
-        expect(screen.getByText("Sign Up")).toBeInTheDocument()
+        expect(screen.getByText("Welcome Back")).toBeInTheDocument()
+        expect(screen.getByText("Create your account.")).toBeInTheDocument()
     })
 
 
@@ -30,9 +31,9 @@ describe('Sign Up Form', () => {
     it('render signup form ', () => {
         renderSignUp()
 
-        expect(screen.getByPlaceholderText('Enter your name')).toBeInTheDocument()
-        expect(screen.getByPlaceholderText('Enter email')).toBeInTheDocument()
-        expect(screen.getByPlaceholderText('Password')).toBeInTheDocument()
+        expect(screen.getByPlaceholderText('Jane Doe')).toBeInTheDocument()
+        expect(screen.getByPlaceholderText('name@domain.com')).toBeInTheDocument()
+        expect(screen.getByPlaceholderText('Create secure password')).toBeInTheDocument()
         expect(screen.getByRole("button", {
             name: /Create an Account/i
         })).toBeInTheDocument()
@@ -40,21 +41,21 @@ describe('Sign Up Form', () => {
 
     it('allow user to enter name ', async () => {
         renderSignUp()
-        const input = screen.getByPlaceholderText("Enter your name")
+        const input = screen.getByPlaceholderText("Jane Doe")
         await userEvent.type(input, "ahmed")
         expect(input.value).toBe("ahmed")
     })
 
-    it('allow user to enter email', async () => {
+    it('allow user to name@domain.com', async () => {
         renderSignUp()
-        const input = screen.getByPlaceholderText("Enter email")
+        const input = screen.getByPlaceholderText("name@domain.com")
         await userEvent.type(input, "ahmed@gmail.com")
         expect(input.value).toBe("ahmed@gmail.com")
     })
 
-    it('allow user to enter password', async () => {
+    it('allow user to enter Create secure password', async () => {
         renderSignUp()
-        const input = screen.getByPlaceholderText("Password")
+        const input = screen.getByPlaceholderText("Create secure password")
         await userEvent.type(input, "abc123")
         expect(input.value).toBe("abc123")
     })
@@ -72,9 +73,9 @@ describe('form Submission tests', () => {
         })
 
         renderSignUp()
-        await userEvent.type(screen.getByPlaceholderText('Enter your name'), "ahmed")
-        await userEvent.type(screen.getByPlaceholderText('Enter email'), "ahmed@gmail.com")
-        await userEvent.type(screen.getByPlaceholderText('Password'), "abc123")
+        await userEvent.type(screen.getByPlaceholderText('Jane Doe'), "ahmed")
+        await userEvent.type(screen.getByPlaceholderText('name@domain.com'), "ahmed@gmail.com")
+        await userEvent.type(screen.getByPlaceholderText('Create secure password'), "abc123")
         await userEvent.click(screen.getByRole('button', {
             name: /Create an Account/i
         }))
@@ -90,9 +91,9 @@ describe('form Submission tests', () => {
         })
 
         renderSignUp()
-        await userEvent.type(screen.getByPlaceholderText('Enter your name'), "name")
-        await userEvent.type(screen.getByPlaceholderText('Enter email'), "ahmed@gmail.com")
-        await userEvent.type(screen.getByPlaceholderText('Password'), "pass")
+        await userEvent.type(screen.getByPlaceholderText('Jane Doe'), "name")
+        await userEvent.type(screen.getByPlaceholderText('name@domain.com'), "ahmed@gmail.com")
+        await userEvent.type(screen.getByPlaceholderText('Create secure password'), "pass")
         await userEvent.click(screen.getByRole('button', {
             name: /Create an Account/i
         }))
@@ -108,9 +109,9 @@ describe('form Submission tests', () => {
         })
 
         renderSignUp()
-        await userEvent.type(screen.getByPlaceholderText('Enter your name'), "ahmed")
-        await userEvent.type(screen.getByPlaceholderText('Enter email'), "wrongemail")
-        await userEvent.type(screen.getByPlaceholderText('Password'), "abc123")
+        await userEvent.type(screen.getByPlaceholderText('Jane Doe'), "ahmed")
+        await userEvent.type(screen.getByPlaceholderText('name@domain.com'), "wrongemail")
+        await userEvent.type(screen.getByPlaceholderText('Create secure password'), "abc123")
         await userEvent.click(screen.getByRole('button', {
             name: /Create an Account/i
         }))
@@ -126,9 +127,9 @@ describe('form Submission tests', () => {
         )
 
         renderSignUp()
-        await userEvent.type(screen.getByPlaceholderText('Enter your name'), "ahmed")
-        await userEvent.type(screen.getByPlaceholderText('Enter email'), "ahmed@gmail.com")
-        await userEvent.type(screen.getByPlaceholderText('Password'), "abc123")
+        await userEvent.type(screen.getByPlaceholderText('Jane Doe'), "ahmed")
+        await userEvent.type(screen.getByPlaceholderText('name@domain.com'), "ahmed@gmail.com")
+        await userEvent.type(screen.getByPlaceholderText('Create secure password'), "abc123")
         await userEvent.click(screen.getByRole('button', {
             name: /Create an Account/i
         }))

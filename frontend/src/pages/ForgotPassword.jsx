@@ -12,16 +12,25 @@ export default function ForgotPassword() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setError('')
+        
         if (!email || !email.includes("@")) {
-            setError(true);
+            setError("Email is required");
             return;
         }
-        setLoading(true);
+        setLoading(true)
+        try{
+    
+            await forgotPassword(email)
+            setSubmitted(true);
 
-        await forgotPassword(email)
-
-        setLoading(false);
-        setSubmitted(true);
+        }
+        catch(error){
+            setError(error.response?.data?.message || 'Something went wrong')
+        }
+        finally{
+            setLoading(false)
+        }
     };
 
     if (submitted) {
@@ -93,7 +102,7 @@ export default function ForgotPassword() {
                         disabled={loading}
                         className="w-full py-3 bg-accent hover:bg-accent-hover text-primary text-xs uppercase tracking-widest font-semibold transition-all shadow-btn cursor-pointer disabled:opacity-50"
                     >
-                        {loading ? "Transmitting..." : "Transmit Recovery Link"}
+                        {loading ? "Transmitting..." : "Send Recovery Link"}
                     </button>
                 </form>
 

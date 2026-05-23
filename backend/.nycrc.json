@@ -1,0 +1,10 @@
+{
+  "include": [
+    "src/**/*.js"
+  ],
+  "exclude": [
+    "src/index.js",
+    "src/config/logger.js",
+    "src/config/autoDelete.js"
+  ]
+}

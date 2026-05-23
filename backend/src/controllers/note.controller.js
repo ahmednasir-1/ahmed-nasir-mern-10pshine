@@ -254,8 +254,6 @@ const permanentDelNote = async (req, res) => {
 
     try {
 
-        console.log("permanet delete ")
-
         const note = await Note.findOneAndDelete({
             _id: req.params.id,
             user: req.user._id,

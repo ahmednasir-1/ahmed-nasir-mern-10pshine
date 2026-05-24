@@ -5,11 +5,11 @@ import { Note } from "../models/note.model.js"
 cron.schedule('* * * * *', async () => {
     try {
 
-        console.log("cron runnning")
+        
 
         const time = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
 
-        const result = await Note.deleteMany({
+        await Note.deleteMany({
             isDeleted: true,
             deletedAt: { $lte: time }
         })
@@ -17,6 +17,5 @@ cron.schedule('* * * * *', async () => {
 
     } catch (error) {
         logger.error(`Auto Deletion Error - ${error.message}`)
-        console.log("auto delete error", error.message)
     }
 })

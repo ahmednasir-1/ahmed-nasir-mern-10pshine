@@ -2,7 +2,7 @@ import { User } from "../models/user.model.js";
 import isEmail from "validator/lib/isEmail.js"
 import logger from "../configs/logger.js";
 import jwt from 'jsonwebtoken';
-import crypto from 'crypto'
+import crypto from 'node:crypto'
 import { forgotPasswordEmail, sendEmailToUser } from "../configs/email.js";
 
 const generateToken = (id) => {
@@ -15,8 +15,6 @@ const generateToken = (id) => {
 
 const registerUser = async (req, res) => {
     try {
-
-        console.log('request body, ', req.body);
 
         const { name, email, password } = req.body;
 
@@ -66,7 +64,7 @@ const registerUser = async (req, res) => {
 
     } catch (error) {
 
-        logger.warn(`User Registration error - ${error.message}`);
+        logger.error(`User Registration error - ${error.message}`);
         res.status(500).json({ message: "Internal Server Error", error: error.message });
     }
 }
@@ -138,7 +136,7 @@ const loginUser = async (req, res) => {
 
     }
     catch (error) {
-        logger.warn(`User Login Error - ${error.message}`);
+        logger.error(`User Login Error - ${error.message}`);
         res.status(500).json({ message: "Internal Server Error" });
     }
 
@@ -155,7 +153,7 @@ const getProfile = async (req, res) => {
         logger.info(`User Get Profile Success`);
         res.status(200).json(user)
     } catch (error) {
-        logger.warn(`User Get Profile Error - ${error.message}`);
+        logger.error(`User Get Profile Error - ${error.message}`);
         res.status(500).json({ message: "Internal Server Error" });
 
     }
@@ -186,7 +184,7 @@ const updateProfile = async (req, res) => {
 
         })
     } catch (error) {
-        logger.warn(`User Update Profile Error - ${error.message}`);
+        logger.error(`User Update Profile Error - ${error.message}`);
         res.status(500).json({ message: "Internal Server Error" });
 
     }
@@ -199,24 +197,24 @@ const changePassword = async (req, res) => {
         const user = await User.findById(req.user._id)
 
         if (!user) {
-            logger.info(`User Update Password Failed - User Not Found ${user}`)
+            logger.info(`User Update Password Failed - User Not Found`)
             return res.status(400).json({ message: "User not found" })
 
         }
         const isMatch = await user.comparePassword(currentPassword)
         if (!isMatch) {
-            logger.info(`User Update Password Failed - Password not Matched ${user}`)
+            logger.info(`User Update Password Failed - Password not Matched`)
             return res.status(400).json({ message: "Password not match" })
         }
 
         user.password = newPassword
         await user.save()
 
-        logger.info(`User Update Password Suceess- Password Changed ${user}`)
+        logger.info(`User Update Password Suceess- Password Changed`)
         res.status(200).json({ message: "Password changed successfuly" })
 
     } catch (error) {
-        logger.warn(`User Update Password Error - ${error.message}`);
+        logger.error(`User Update Password Error - ${error.message}`);
         res.status(500).json({ message: "Internal Server Error" });
 
     }
@@ -229,7 +227,7 @@ const forgotPassword = async (req, res) => {
         const user = await User.findOne({email})
 
         if (!user) {
-            logger.info(`User Forgot Password Failed - User Not Found ${user}`)
+            logger.info(`User Forgot Password Failed - User Not Found`)
             return res.status(400).json({ message: "User not found" })
 
         }
@@ -238,17 +236,17 @@ const forgotPassword = async (req, res) => {
         const token = crypto.randomBytes(32).toString('hex')
         const expiry = Date.now() + 3600000; // 1 hour
        
-        user.resetPasswordToken = token, 
+        user.resetPasswordToken = token
         user.resetPasswordTokenExpiry = expiry
         await user.save()
         await forgotPasswordEmail(email.toLowerCase(), token)
         
 
-        logger.info(`User forgot Password Suceess- Email Sent ${user}`)
+        logger.info(`User forgot Password Suceess- Email Sent`)
         res.status(200).json({ message: "Please check your email" })
 
     } catch (error) {
-        logger.warn(`User forgot Password Error - ${error.message}`);
+        logger.error(`User forgot Password Error - ${error.message}`);
         res.status(500).json({ message: "Internal Server Error" });
 
     }
@@ -266,7 +264,7 @@ const resetPassword = async (req, res) => {
         })
 
         if (!user) {
-            logger.info(`User Reset Password Failed - Invalid Token ${user}`)
+            logger.info(`User Reset Password Failed - Invalid Token`)
             return res.status(400).json({ message: "Invalid Token" })
 
         }
@@ -277,11 +275,11 @@ const resetPassword = async (req, res) => {
         await user.save()
         
 
-        logger.info(`User reset Password Suceess ${user}`)
+        logger.info(`User reset Password Suceess`)
         res.status(200).json({ message: "Password Changed Successfully" })
 
     } catch (error) {
-        logger.warn(`User reset Password Error - ${error.message}`);
+        logger.error(`User reset Password Error - ${error.message}`);
         res.status(500).json({ message: "Internal Server Error" });
 
     }

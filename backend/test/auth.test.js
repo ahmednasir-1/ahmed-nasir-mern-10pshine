@@ -5,14 +5,9 @@ import { User } from '../src/models/user.model.js'
 
 const chai = use(chaiHttp)
 
-describe('Test Check', () => {
-  it('should run this test', () => {
-    console.log('TEST IS RUNNING')
-    expect(true).to.equal(true)
-  })
-})
 
-describe('Auth - Register', function () {
+
+describe('Auth - Register  [auth.test.js]', function () {
   this.timeout(10000)
   beforeEach(async () => {
     await User.deleteMany({ email: 'john@gmail.com' })

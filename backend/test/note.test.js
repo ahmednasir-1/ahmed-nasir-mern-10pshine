@@ -10,7 +10,7 @@ const chai = use(chaiHttp)
 let token;
 let noteId;
 
-describe("Notes", () => {
+describe("Notes  [note.test.js]", () => {
 
     before(async () => {
         // clean up

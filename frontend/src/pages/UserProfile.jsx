@@ -25,6 +25,9 @@ export default function UserProfile() {
                 console.log(error)
 
             }
+            finally{
+                setLoading(false)
+            }
         }
         fetchProfile()
     }, [])
@@ -61,25 +64,24 @@ export default function UserProfile() {
 
     const handleChangePassword = async (e) => {
         e.preventDefault();
-        setLoading(true)
         setError('')
         setMessage('')
-
-
+        
+        if (newPassword != confirmPassword) {
+            setError("Passwords do not match")
+            setLoading(false)
+            return
+        }
+        
+        setLoading(true)
         try {
-            if (newPassword != confirmPassword) {
-                setError("Passwords do not Match")
-                setError('')
-                setLoading(false)
-            }
-            else {
-
+           
                 await changePassword(currPassword, newPassword)
                 setCurrPassword('')
                 setNewPassword('')
                 setConfirmPassword('')
                 setMessage("Password Changed Successfully")
-            }
+            
         }
         catch {
             setError("something went wrong - password")
@@ -229,7 +231,7 @@ export default function UserProfile() {
                             disabled={loading}
                             className="px-6 py-2.5 bg-accent hover:bg-accent-hover text-primary text-xs uppercase tracking-widest font-semibold transition-all shadow-btn cursor-pointer rounded-none disabled:opacity-30 disabled:cursor-not-allowed"
                         >
-                            {loading ? "Changing Password..." : "Chnage Password"}
+                            {loading ? "Changing Password..." : "Change Password"}
                         </button>
                     </div>
                 </div>

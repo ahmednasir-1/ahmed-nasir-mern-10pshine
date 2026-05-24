@@ -109,14 +109,14 @@ describe('Dashboard', () => {
 
         renderDashboard()
         await waitFor(() => {
-            expect(screen.getByText('No notes yet. Create your first note!')).toBeInTheDocument()
+            expect(screen.getByText('No canvases yet. Create your first note!')).toBeInTheDocument()
         })
     })
 
     it('remove notes when delete', async () => {
 
         vi.spyOn(noteAPI, 'getAllNotes').mockResolvedValue(fakeNotes)
-        vi.spyOn(noteAPI, 'delNote').mockResolvedValue({message: 'deleted'})
+        vi.spyOn(noteAPI, 'moveToTrash').mockResolvedValue({message: 'deleted'})
         renderDashboard()
 
         await waitFor(() => {

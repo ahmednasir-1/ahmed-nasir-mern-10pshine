@@ -60,7 +60,8 @@ function SignIn() {
       <div className="bg-secondary w-full max-w-md p-10 border border-border shadow-card">
 
         <div className="text-center mb-8">
-          <h2 className="font-serif text-3xl font-medium tracking-tight text-text-primary">Welcome Back</h2>
+          <h2 className="font-serif text-3xl font-medium tracking-tight text-text-primary">Notes Application</h2>
+          <p className="text-xs text-text-secondary mt-2">Welcome Back.</p>
         </div>
 
         {error && (<p className="text-red-500 text-sm mb-4">{error}</p>)}

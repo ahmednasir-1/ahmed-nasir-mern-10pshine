@@ -1,5 +1,5 @@
 import Sidebar from "./Sidebar.jsx";
-import { BrowserRouter, useNavigate } from "react-router-dom";
+import { BrowserRouter} from "react-router-dom";
 import { screen, render } from "@testing-library/react";
 import "@testing-library/jest-dom"
 import userEvent from "@testing-library/user-event";
@@ -71,7 +71,7 @@ describe('Sidebar', () => {
         renderSidebar()
         await userEvent.click(screen.getByText(/All Notes/i))
 
-        expect(window.location.pathname).toBe('/dashboard')
+        expect(globalThis.location.pathname).toBe('/dashboard')
 
     })
 
@@ -79,7 +79,7 @@ describe('Sidebar', () => {
         renderSidebar()
         await userEvent.click(screen.getByText(/Trash/i))
 
-        expect(window.location.pathname).toBe('/trash')
+        expect(globalThis.location.pathname).toBe('/trash')
 
     })
 

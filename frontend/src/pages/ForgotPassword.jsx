@@ -2,6 +2,8 @@ import { useState } from "react";
 import { forgotPassword } from "../api/user.api.js";
 import { Link } from "react-router-dom";
 import { RiResetRightFill } from "react-icons/ri";
+import { Logger } from "react-logger-lib";
+
 
 export default function ForgotPassword() {
     const [email, setEmail] = useState("");
@@ -13,22 +15,26 @@ export default function ForgotPassword() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('')
-        
-        if (!email || !email.includes("@")) {
+
+
+        if (!email?.includes('@')) {
             setError("Email is required");
+            Logger.of('App.ForgotPassword').info('Email is required')
             return;
         }
         setLoading(true)
-        try{
-    
+        try {
+
             await forgotPassword(email)
             setSubmitted(true);
+            Logger.of('App.ForgotPassword').info('Email Sent')
 
         }
-        catch(error){
+        catch (error) {
             setError(error.response?.data?.message || 'Something went wrong')
+            Logger.of('App.ForgotPassword').error(`FAiled to send email - ${error}`)
         }
-        finally{
+        finally {
             setLoading(false)
         }
     };
@@ -38,7 +44,7 @@ export default function ForgotPassword() {
             <div className="min-h-screen bg-gradient-to-br from-primary via-[#161922] to-primary flex items-center justify-center p-4 font-sans antialiased">
                 <div className="bg-secondary w-full max-w-md p-10 border border-border shadow-card text-center">
 
-                    
+
                     <h2 className="font-serif text-3xl font-medium tracking-tight text-text-primary mb-2">
                         Email Sent
                     </h2>
@@ -53,8 +59,8 @@ export default function ForgotPassword() {
                         onClick={() => setSubmitted(false)}
                         className="text-[10px] flex gap-3 items-center justify-items-center center uppercase tracking-widest font-semibold text-text-secondary hover:text-accent transition-colors"
                     >
-                    <RiResetRightFill />
-                    Resend Link
+                        <RiResetRightFill />
+                        Resend Link
                     </button>
                 </div>
             </div>
@@ -78,18 +84,16 @@ export default function ForgotPassword() {
 
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div>
-                        <label className="block text-[10px] uppercase tracking-widest font-semibold text-text-primary mb-1.5">
-                            Email
-                        </label>
+                        <label htmlFor="email" className="block text-[10px] uppercase tracking-widest font-semibold text-text-primary mb-1.5">Email</label>
+
                         <input
+                            id="email"
                             type="email"
                             value={email}
                             onChange={(e) => { setEmail(e.target.value); setError(false); }}
                             placeholder="name@domain.com"
-                            className={`w-full px-4 py-2.5 bg-primary border text-sm text-text-primary rounded-none focus:outline-none focus:border-accent transition-colors placeholder:text-text-secondary/30 ${
-                                error ? "border-red-500/60" : "border-border"
-                            }`}
-                        />
+                            className={`w-full px-4 py-2.5 bg-primary border text-sm text-text-primary rounded-none focus:outline-none focus:border-accent transition-colors placeholder:text-text-secondary/30 ${error ? "border-red-500/60" : "border-border"
+                                }`} />
                         {error && (
                             <p className="text-[10px] text-red-400 mt-1.5 uppercase tracking-widest">
                                 Enter a valid email address

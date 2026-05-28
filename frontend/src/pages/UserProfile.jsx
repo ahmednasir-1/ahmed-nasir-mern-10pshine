@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { changePassword, getProfile, updateProfile } from "../api/user.api"
+import { Logger } from "react-logger-lib"
 
 export default function UserProfile() {
 
@@ -8,13 +9,15 @@ export default function UserProfile() {
     const [currPassword, setCurrPassword] = useState('')
     const [newPassword, setNewPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
-    const [preview, setPreview] = useState('')
     const [error, setError] = useState('')
     const [message, setMessage] = useState('')
     const [loading, setLoading] = useState(false)
 
 
     useEffect(() => {
+
+        Logger.of('App.UserProfile').info('User Profile PAge loaded')
+
         const fetchProfile = async () => {
 
             try {
@@ -22,10 +25,10 @@ export default function UserProfile() {
                 setUser(data)
                 setName(data.name)
             } catch (error) {
-                console.log(error)
+                Logger.of('App.UserProfile').error(`Failed to fetch data - ${error}`)
 
             }
-            finally{
+            finally {
                 setLoading(false)
             }
         }
@@ -51,9 +54,11 @@ export default function UserProfile() {
 
             setUser(res)
             setMessage("Profile Updated Successfully")
+            Logger.of('App.UserProfile').info('User Profile Updated Successfully')
         }
         catch {
             setError("something went wrong")
+            Logger.of('App.UserProfile').error(`FAiled to update profile - ${error}`)
         }
         finally {
             setLoading(false)
@@ -66,25 +71,27 @@ export default function UserProfile() {
         e.preventDefault();
         setError('')
         setMessage('')
-        
+
         if (newPassword != confirmPassword) {
             setError("Passwords do not match")
             setLoading(false)
             return
         }
-        
+
         setLoading(true)
         try {
-           
-                await changePassword(currPassword, newPassword)
-                setCurrPassword('')
-                setNewPassword('')
-                setConfirmPassword('')
-                setMessage("Password Changed Successfully")
-            
+
+            await changePassword(currPassword, newPassword)
+            setCurrPassword('')
+            setNewPassword('')
+            setConfirmPassword('')
+            setMessage("Password Changed Successfully")
+            Logger.of('App.UserProfile').info('User Profile Changeed Password Successfully')
+
         }
         catch {
             setError("something went wrong - password")
+            Logger.of('App.UserProfile').error(`FAiled to change password - ${error}`)
         }
         finally {
             setLoading(false)
@@ -141,27 +148,28 @@ export default function UserProfile() {
                 {/* Form Content Block */}
                 <div className="md:col-span-2 space-y-5 bg-secondary p-8 border border-border shadow-card">
                     <div>
-                        <label className="block text-[10px] uppercase tracking-widest font-semibold text-text-secondary mb-1.5">
-                            Full Profile Name
-                        </label>
+                        <label htmlFor="fullname" className="block text-[10px] uppercase tracking-widest font-semibold text-text-secondary mb-1.5">Full Profile Name</label>
+
                         <input
+                            id="fullname"
                             type="text"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
-                            className="w-full px-4 py-2.5 bg-primary border border-border text-sm text-text-primary outline-none focus:border-accent transition-all duration-200"
-                        />
+                            className="w-full px-4 py-2.5 bg-primary border border-border text-sm text-text-primary outline-none focus:border-accent transition-all duration-200" />
                     </div>
+
+
                     <div>
-                        <label className="block text-[10px] uppercase tracking-widest font-semibold text-text-secondary mb-1.5">
-                            Email Address
-                        </label>
+                        <label htmlFor="email" className="block text-[10px] uppercase tracking-widest font-semibold text-text-secondary mb-1.5">Email Address</label>
+
                         <input
+                            id="email"
                             type="email"
                             value={user?.email || ''}
                             disabled
-                            className="w-full px-4 py-2.5 bg-primary border border-border text-sm text-text-primary outline-none focus:border-accent transition-all duration-200"
-                        />
+                            className="w-full px-4 py-2.5 bg-primary border border-border text-sm text-text-primary outline-none focus:border-accent transition-all duration-200" />
                     </div>
+
                     <div className="flex justify-end pt-2">
                         <button
                             onClick={handleUpdateProfile}
@@ -185,42 +193,39 @@ export default function UserProfile() {
 
                 <div className="md:col-span-2 bg-secondary p-8 border border-border shadow-card space-y-5">
                     <div>
-                        <label className="block text-[10px] uppercase tracking-widest font-semibold text-text-secondary mb-1.5">
-                            Current Password
-                        </label>
+                        <label htmlFor="currPassword" className="block text-[10px] uppercase tracking-widest font-semibold text-text-secondary mb-1.5">Current Password</label>
                         <input
+                            id="currPassword"
                             type="password"
                             placeholder="••••••••"
                             value={currPassword}
                             onChange={(e) => setCurrPassword(e.target.value)}
-                            className="w-full px-4 py-2.5 bg-primary border border-border text-sm text-text-primary outline-none focus:border-accent transition-all duration-200 placeholder:text-text-secondary/20"
-                        />
+                            className="w-full px-4 py-2.5 bg-primary border border-border text-sm text-text-primary outline-none focus:border-accent transition-all duration-200 placeholder:text-text-secondary/20" />
                     </div>
+
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                            <label className="block text-[10px] uppercase tracking-widest font-semibold text-text-secondary mb-1.5">
-                                New Password
-                            </label>
+                            <label htmlFor="newPassword" className="block text-[10px] uppercase tracking-widest font-semibold text-text-secondary mb-1.5">New Password</label>
                             <input
+                                id="newPassword"
                                 type="password"
                                 placeholder="••••••••"
                                 value={newPassword}
                                 onChange={(e) => setNewPassword(e.target.value)}
-                                className="w-full px-4 py-2.5 bg-primary border border-border text-sm text-text-primary outline-none focus:border-accent transition-all duration-200 placeholder:text-text-secondary/20"
-                            />
+                                className="w-full px-4 py-2.5 bg-primary border border-border text-sm text-text-primary outline-none focus:border-accent transition-all duration-200 placeholder:text-text-secondary/20" />
                         </div>
+
+
                         <div>
-                            <label className="block text-[10px] uppercase tracking-widest font-semibold text-text-secondary mb-1.5">
-                                Re-type New Password
-                            </label>
+                            <label htmlFor="confirmPass" className="block text-[10px] uppercase tracking-widest font-semibold text-text-secondary mb-1.5">Re-type New Password</label>
                             <input
+                                id="confirmPass"
                                 type="password"
                                 placeholder="••••••••"
                                 value={confirmPassword}
                                 onChange={(e) => setConfirmPassword(e.target.value)}
-                                className="w-full px-4 py-2.5 bg-primary border border-border text-sm text-text-primary outline-none focus:border-accent transition-all duration-200 placeholder:text-text-secondary/20"
-                            />
+                                className="w-full px-4 py-2.5 bg-primary border border-border text-sm text-text-primary outline-none focus:border-accent transition-all duration-200 placeholder:text-text-secondary/20" />
                         </div>
                     </div>
 

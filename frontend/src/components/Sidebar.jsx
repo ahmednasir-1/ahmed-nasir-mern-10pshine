@@ -1,4 +1,6 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom'
+import PropTypes from 'prop-types'
+import { Logger } from 'react-logger-lib'
 
 function Sidebar({ showSidebar }) {
   const location = useLocation()
@@ -7,9 +9,11 @@ function Sidebar({ showSidebar }) {
   const user = JSON.parse(localStorage.getItem('user') || '{}')
 
   const handleLogout = (e) => {
+
     e.stopPropagation();
     localStorage.removeItem('token')
     localStorage.removeItem('user')
+    Logger.of('App.Sidebar').info('User Logout Success')
     navigate('/')
   }
 
@@ -59,7 +63,7 @@ function Sidebar({ showSidebar }) {
             {location.pathname === item.path && (
               <span className="w-1.5 h-1.5 rounded-full bg-accent shrink-0" />
             )}
-            <span className={location.pathname !== item.path ? 'pl-4' : ''}>
+            <span className={location.pathname === item.path ? '' : 'pl-4'}>
               {item.label}
             </span>
           </Link>
@@ -69,7 +73,9 @@ function Sidebar({ showSidebar }) {
       {/* User Area */}
       <div
         onClick={() => navigate('/profile')}
-        className="pt-4 border-t border-border flex items-center space-x-3">
+        role="button"
+        className="pt-4 border-t border-border flex items-center space-x-3 w-full text-left bg-transparent"
+      >
 
         <div className="w-8 h-8 rounded-none bg-primary border border-border flex items-center justify-center font-serif text-sm font-semibold text-accent shrink-0">
           {user.name?.charAt(0).toUpperCase() || 'U'}
@@ -106,6 +112,10 @@ function Sidebar({ showSidebar }) {
 
 
   )
+}
+
+Sidebar.propTypes = {
+  showSidebar: PropTypes.bool.isRequired,
 }
 
 export default Sidebar

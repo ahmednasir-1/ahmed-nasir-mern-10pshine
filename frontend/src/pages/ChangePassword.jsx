@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { resetPassword } from "../api/user.api";
+import { Logger } from "react-logger-lib";
 
 export default function ChangePassword() {
 
@@ -19,22 +20,24 @@ export default function ChangePassword() {
         setLoading(true)
 
         try {
-            if (password != confirmPassword) {
-                setError("Password dont match")
-            }
-            else {
+            if (password === confirmPassword) {
                 await resetPassword(token, password)
                 setMessage('Password reset successfully!')
+                Logger.of('App.ChangePassword').info('Password reset Successfully')
 
                 //redirect to login page
                 setTimeout(() => navigate('/'), 2000)
-
+            }
+            else {
+                setError("Password dont match")
+                Logger.of('App.ChangePassword').error('Password dont match')
             }
 
         } catch (error) {
             setError(error.response?.data?.message || "Something went wrong!")
+            Logger.of('App.ChangePassword').error(error.response?.data?.message || "Something went wrong!")
         }
-        finally{
+        finally {
             setLoading(false)
         }
 
@@ -65,25 +68,25 @@ export default function ChangePassword() {
 
                 <form className="space-y-6">
                     <div>
-                        <label className="block text-[10px] uppercase tracking-widest font-semibold text-text-primary mb-1.5">New Password</label>
-                        <input
-                            type="password"
-                            placeholder="••••••••"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            className="w-full px-4 py-2.5 bg-primary border border-border text-sm text-text-primary rounded-none focus:outline-none focus:border-accent transition-colors placeholder:text-text-secondary/30"
-                        />
+                        <label htmlFor="newpass" className="block text-[10px] uppercase tracking-widest font-semibold text-text-primary mb-1.5">New Password</label>
+                            <input
+                                id="newpass"
+                                type="password"
+                                placeholder="••••••••"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                className="w-full px-4 py-2.5 bg-primary border border-border text-sm text-text-primary rounded-none focus:outline-none focus:border-accent transition-colors placeholder:text-text-secondary/30" />
                     </div>
 
                     <div>
-                        <label className="block text-[10px] uppercase tracking-widest font-semibold text-text-primary mb-1.5">Confirm Password</label>
-                        <input
-                            type="password"
-                            placeholder="••••••••"
-                            value={confirmPassword}
-                            onChange={(e) => setConfirmPassword(e.target.value)}
-                            className="w-full px-4 py-2.5 bg-primary border border-border text-sm text-text-primary rounded-none focus:outline-none focus:border-accent transition-colors placeholder:text-text-secondary/30"
-                        />
+                        <label htmlFor="confirmpass" className="block text-[10px] uppercase tracking-widest font-semibold text-text-primary mb-1.5">Confirm Password</label>
+                            <input
+                                id="confirmpass"
+                                type="password"
+                                placeholder="••••••••"
+                                value={confirmPassword}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
+                                className="w-full px-4 py-2.5 bg-primary border border-border text-sm text-text-primary rounded-none focus:outline-none focus:border-accent transition-colors placeholder:text-text-secondary/30" />
                     </div>
 
                     <button
@@ -92,7 +95,7 @@ export default function ChangePassword() {
                         disabled={loading}
                         title="Reset Password"
                     >
-                        {loading? 'Loading...' : 'Reset Password'}
+                        {loading ? 'Loading...' : 'Reset Password'}
                     </button>
                 </form>
 

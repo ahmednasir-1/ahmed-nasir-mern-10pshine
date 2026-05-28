@@ -1,5 +1,6 @@
 import ReactQuill from 'react-quill-new'
 import 'react-quill-new/dist/quill.snow.css'
+import PropTypes from 'prop-types'
 
 export default function Quill({ value, onChange }) {
     const modules = {
@@ -31,5 +32,11 @@ export default function Quill({ value, onChange }) {
             placeholder="Start writing your note..."
         />
     )
+}
+
+Quill.propTypes = {
+  value: PropTypes.any.isRequired,
+  onChange: PropTypes.any.isRequired,
+  
 }
 

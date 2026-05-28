@@ -4,6 +4,7 @@ import Navbar from '../components/Navbar'
 import NoteCard from '../components/NoteCard'
 import TextEditor from '../components/TextEditor'
 import { getAllNotes, moveToTrash, togglePin } from '../api/note.api'
+import { Logger } from 'react-logger-lib'
 
 function Dashboard() {
 
@@ -30,15 +31,17 @@ function Dashboard() {
   }
 
   useEffect(() => {
+    Logger.of('App.Dashboard').info('Dashboard component rendered')
     fetchNotes()
   }, [])
 
   const fetchNotes = async () => {
     try {
+      Logger.of('App.Dashboard').info('Fetching All Notes')
       const notes = await getAllNotes()
       setNotes(notes)
     } catch (error) {
-      console.log('failed to fetch notes', error)
+      Logger.of('App.Dashboard').info(`Failed to fetch notes - ${error}`)
     } finally {
       setLoading(false)
     }
@@ -48,10 +51,12 @@ function Dashboard() {
     try {
       await moveToTrash(noteId)
 
+      Logger.of('App.Dashboard').info('Note moved to trash')
       setNotes(notes.filter((note) => note._id !== noteId))
 
+
     } catch (error) {
-      console.log('failed delete note')
+      Logger.of('App.Dashboard').info('Failed to delete note')
     }
   }
 
@@ -62,10 +67,11 @@ function Dashboard() {
   const handlePin = async (noteId) => {
     try {
       await togglePin(noteId)
+      Logger.of('App.Dashboard').info('Note Pinned')
 
       setNotes(notes.map((note) => note._id === noteId ? { ...note, isPinned: !note.isPinned } : note))
     } catch (error) {
-
+      Logger.of('App.Dashboard').info('Failed to pinned note')
     }
   }
   return (
@@ -82,7 +88,7 @@ function Dashboard() {
         />
 
         {/* siebar  */}
-        <Sidebar showSidebar={showSidebar}/>
+        <Sidebar showSidebar={showSidebar} />
 
         {/* Notes Grid */}
         <div className="flex-1 overflow-hidden">

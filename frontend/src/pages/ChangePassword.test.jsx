@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react'
-import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router-dom'
+import { MemoryRouter, Route, Routes, useNavigate } from 'react-router-dom'
 import userEvent from '@testing-library/user-event'
 import ChangePassword from '../pages/ChangePassword'
 import * as userAPI from '../api/user.api'
@@ -32,16 +32,16 @@ describe('ChangePassword Page', () => {
     vi.clearAllMocks()
   })
 
-  
 
- it('should render the page correctly', () => {
-  renderChangePassword()
 
-  // ✅ find by exact text in heading div
-  expect(screen.getByText('Reset Password', {
-    selector: 'div'  // ← only find div not button
-  })).toBeInTheDocument()
-})
+  it('should render the page correctly', () => {
+    renderChangePassword()
+
+
+    expect(screen.getByText('Reset Password', {
+      selector: 'div'
+    })).toBeInTheDocument()
+  })
 
   it('should render return to login link', () => {
     renderChangePassword()
@@ -70,7 +70,7 @@ describe('ChangePassword Page', () => {
     expect(screen.getByText(/enter and confirm your new password/i)).toBeInTheDocument()
   })
 
- 
+
 
   it('should allow user to type in password field', async () => {
     renderChangePassword()
@@ -90,7 +90,7 @@ describe('ChangePassword Page', () => {
     expect(inputs[1].value).toBe('newpass123')
   })
 
-  
+
 
   it('should show error if passwords do not match', async () => {
     renderChangePassword()
@@ -120,7 +120,7 @@ describe('ChangePassword Page', () => {
     expect(mockReset).not.toHaveBeenCalled()
   })
 
- 
+
 
   it('should call resetPassword API with token and password', async () => {
     const mockReset = vi.spyOn(userAPI, 'resetPassword').mockResolvedValue({
@@ -174,6 +174,9 @@ describe('ChangePassword Page', () => {
   })
 
   it('should show success message after reset', async () => {
+
+    
+
     vi.spyOn(userAPI, 'resetPassword').mockResolvedValue({
       message: 'Password reset successfully!'
     })
@@ -186,13 +189,13 @@ describe('ChangePassword Page', () => {
 
     await userEvent.click(screen.getByTitle(/Reset Password/i))
 
-    
+
     await waitFor(() => {
-      expect(mockNavigate).toHaveBeenCalled()  
+      expect(mockNavigate).toHaveBeenCalled()
     })
   })
 
-  
+
 
   it('should show error from backend', async () => {
     vi.spyOn(userAPI, 'resetPassword').mockRejectedValue({
@@ -258,7 +261,7 @@ describe('ChangePassword Page', () => {
     })
   })
 
-  
+
 
   it('should handle empty password fields', async () => {
     const mockReset = vi.spyOn(userAPI, 'resetPassword')

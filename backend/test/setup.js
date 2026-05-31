@@ -6,9 +6,9 @@ import app from '../src/app.js'
 chai.use(chaiHttp)
 
 export const expect = chai.expect
-export const server = app
+export { app as server }
 
-before(async function() {
+before(async function () {
   this.timeout(20000)
   await mongoose.connect('mongodb://localhost:27017/notesapp_test')
 })
@@ -16,5 +16,5 @@ before(async function() {
 after(async () => {
   await mongoose.connection.dropDatabase()
   await mongoose.connection.close()
-  
+
 })

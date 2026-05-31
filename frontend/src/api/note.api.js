@@ -99,7 +99,7 @@ export const getTrashNotes = async () =>{
 
 export const moveToTrash = async (id) =>{
     const token = localStorage.getItem('token')
-    const res = await axios.delete(`${BASE_URL}/trash/${id}`, {
+    await axios.delete(`${BASE_URL}/trash/${id}`, {
         headers:{
             Authorization: `${token}`
         }
@@ -119,8 +119,6 @@ export const restoreNotes = async (id) =>{
 
 export const permanentDelNote = async (id) =>{
     const token = localStorage.getItem('token')
-
-    console.log("FE permanen del is" ,id);
     
     const res = await axios.delete(`${BASE_URL}/permanent/${id}`, {
         headers:{

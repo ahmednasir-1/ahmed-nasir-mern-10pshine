@@ -5,6 +5,11 @@ export default defineConfig({
   plugins: [react()],
   test: {
     environment: "jsdom",
-    globals: true
+    globals: true,
+    coverage: {
+      reporter: ['lcov', 'text'],
+      include: ['src/**/*.{js,jsx}'],
+      exclude: ['src/main.jsx', 'src/vite-env.d.ts']
+    }
   },
 });

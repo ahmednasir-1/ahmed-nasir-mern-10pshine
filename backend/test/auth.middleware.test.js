@@ -1,4 +1,3 @@
-import sinon from 'sinon'
 import jwt from 'jsonwebtoken'
 import protect from '../src/middleware/auth.middleware.js'
 import { expect } from './setup.js'
@@ -7,20 +6,23 @@ import { User } from '../src/models/user.model.js'
 describe('Auth Middleware  [auth.middleware.test.js]', () => {
 
     let req, res, next
+    let statusCode, jsonCalled, nextCalled
 
     beforeEach(() => {
-        // mock req, res, next
+        statusCode = null
+        jsonCalled = false
+        nextCalled = false
+
+
         req = { headers: {} }
         res = {
-            status: sinon.stub().returnsThis(),
-            json: sinon.stub()
+            status(code) { statusCode = code; return this },
+            json(data) { jsonCalled = true; return this }
         }
-        next = sinon.stub()
+        next = () => { nextCalled = true }
     })
 
-    afterEach(() => {
-        sinon.restore()
-    })
+
 
 
 
@@ -29,8 +31,8 @@ describe('Auth Middleware  [auth.middleware.test.js]', () => {
 
         await protect(req, res, next)
 
-        expect(res.status.calledWith(400)).to.be.true
-        expect(next.called).to.be.false
+        expect(statusCode).to.equal(400)
+        expect(nextCalled).to.be.false
     })
 
     it('should return 400 if token is empty', async () => {
@@ -38,19 +40,19 @@ describe('Auth Middleware  [auth.middleware.test.js]', () => {
 
         await protect(req, res, next)
 
-        expect(res.status.calledWith(400)).to.be.true
-        expect(next.called).to.be.false
+        expect(statusCode).to.equal(400)
+        expect(nextCalled).to.be.false
     })
 
-  
+
 
     it('should return 401 if token is invalid', async () => {
         req.headers.authorization = 'invalidtoken123'
 
         await protect(req, res, next)
 
-        expect(res.status.calledWith(401)).to.be.true
-        expect(next.called).to.be.false
+        expect(statusCode).to.equal(401)
+        expect(nextCalled).to.be.false
     })
 
     it('should return 401 if token is malformed', async () => {
@@ -58,11 +60,11 @@ describe('Auth Middleware  [auth.middleware.test.js]', () => {
 
         await protect(req, res, next)
 
-        expect(res.status.calledWith(401)).to.be.true
-        expect(next.called).to.be.false
+        expect(statusCode).to.equal(401)
+        expect(nextCalled).to.be.false
     })
 
-   
+
 
     it('should call next if token is valid', async () => {
         // create real user
@@ -82,7 +84,7 @@ describe('Auth Middleware  [auth.middleware.test.js]', () => {
 
         await protect(req, res, next)
 
-        expect(next.called).to.be.true
+        expect(nextCalled).to.be.true
         expect(req.user).to.exist
     })
 

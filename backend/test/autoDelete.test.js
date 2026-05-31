@@ -1,4 +1,4 @@
-import { expect, server } from './setup.js'
+import { expect} from './setup.js'
 import {Note} from '../src/models/note.model.js'
 import {User} from '../src/models/user.model.js'
 

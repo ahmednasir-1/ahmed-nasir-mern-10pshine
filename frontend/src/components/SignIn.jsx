@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { login } from "../api/auth.api";
 import { Link, useNavigate } from "react-router-dom";
+import { Logger } from "react-logger-lib";
 
 function SignIn() {
 
@@ -20,13 +21,13 @@ function SignIn() {
 
 
   const handleSubmit = async (e) => {
+
+    Logger.of('App.SignIn').info('User Logging In...')
     e.preventDefault();
     setLoading(true);
     setError('')
 
     try {
-
-      console.log('data', formData);
 
       // send data POST request
       const data = await login(
@@ -42,11 +43,13 @@ function SignIn() {
         email: data.email
       }))
 
+      Logger.of('App.SignIn').info('User Login Success')
       // redirect to dashboard
       navigate('/dashboard');
 
     } catch (error) {
       setError(error.response?.data?.message || "Something went wrong!")
+      Logger.of('App.SignIn').error(`User login Failed - ${error}`)
     }
     finally {
       setLoading(false);
@@ -69,25 +72,26 @@ function SignIn() {
         <form className="space-y-5">
 
           <div>
-            <label className="block text-[10px] uppercase tracking-widest font-semibold text-text-primary mb-1.5">Email Address</label>
-            <input
-              type="email"
-              name="email"
-              placeholder="name@domain.com"
-              className="w-full px-4 py-2.5 bg-primary border border-border text-sm text-text-primary rounded-none focus:outline-none focus:border-accent transition-colors placeholder:text-text-secondary/30"
-              value={formData.email}
-              onChange={(e) => handleChange(e)}
-            />
+            <label htmlFor="email" className="block text-[10px] uppercase tracking-widest font-semibold text-text-primary mb-1.5">Email Address</label>
+              <input
+                id="email"
+                type="email"
+                name="email"
+                placeholder="name@domain.com"
+                className="w-full px-4 py-2.5 bg-primary border border-border text-sm text-text-primary rounded-none focus:outline-none focus:border-accent transition-colors placeholder:text-text-secondary/30"
+                value={formData.email}
+                onChange={(e) => handleChange(e)} />
           </div>
 
           <div>
             <div className="flex justify-between items-center mb-1.5">
-              <label className="block text-[10px] uppercase tracking-widest font-semibold text-text-primary">Password</label>
+              <label htmlFor="password" className="block text-[10px] uppercase tracking-widest font-semibold text-text-primary">Password</label>
 
               <Link to="/forgot-password" className="text-[10px] uppercase tracking-wider text-text-secondary hover:text-accent transition-colors">Forgot Password?</Link>
 
             </div>
             <input
+              id="password"
               type="password"
               name="password"
               placeholder="••••••••"

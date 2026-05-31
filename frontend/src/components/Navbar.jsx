@@ -1,6 +1,5 @@
-import { useState } from "react"
 import { GiHamburgerMenu } from "react-icons/gi";
-import Sidebar from "./Sidebar";
+import PropTypes from 'prop-types'
 
 export default function Navbar({ search, setSearch, onCreateNote, showEditor, setShowSidebar, showSidebar }) {
 
@@ -58,4 +57,13 @@ export default function Navbar({ search, setSearch, onCreateNote, showEditor, se
       </div>
     </div>
   )
+}
+
+Navbar.propTypes = {
+  search: PropTypes.string.isRequired,
+  setSearch: PropTypes.func.isRequired,
+  onCreateNote: PropTypes.func.isRequired,
+  showEditor: PropTypes.bool.isRequired,
+  setShowSidebar: PropTypes.func.isRequired,
+  showSidebar: PropTypes.bool.isRequired,
 }

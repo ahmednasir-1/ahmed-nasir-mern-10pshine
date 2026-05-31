@@ -3,7 +3,6 @@ import SignUp from "./components/SignUp";
 import TextEditor from "./components/TextEditor";
 import Dashboard from "./pages/Dashboard";
 import Home from "./pages/Home";
-import NoteCard from "./components/NoteCard";
 import UserProfile from "./pages/UserProfile";
 import Trash from "./pages/Trash";
 import ForgotPassword from "./pages/ForgotPassword";

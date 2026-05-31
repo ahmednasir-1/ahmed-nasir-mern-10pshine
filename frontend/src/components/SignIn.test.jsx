@@ -3,7 +3,6 @@ import { BrowserRouter } from "react-router-dom";
 import { screen, render, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom"
 import userEvent from "@testing-library/user-event";
-import { login } from "../api/auth.api.js";
 import * as authAPI from "../api/auth.api.js"
 
 

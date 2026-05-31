@@ -1,7 +1,7 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { registerAPI } from "../api/auth.api";
+import { Logger } from 'react-logger-lib'
 
 function SignUp() {
 
@@ -21,27 +21,29 @@ function SignUp() {
   }
 
   const handleSubmit = async (e) => {
+
+    Logger.of('App.Signup').info("User signing up ....")
     e.preventDefault();
     setLoading(true);
     setError('');
 
     try {
 
-      console.log(formData);
-
       // send data POST request
-      const data = await registerAPI(
+      await registerAPI(
         formData.name,
         formData.email,
         formData.password,
 
       )
 
+       Logger.of('App.Signup').info("User sign up success")
       // redirect to sign in page
       navigate('/');
 
     } catch (error) {
       setError(error.response?.data?.message || "Something went wrong")
+       Logger.of('App.Signup').error(`Failed to Sign Up - ${error}`)
 
     }
     finally {
@@ -64,39 +66,39 @@ function SignUp() {
         <form className="space-y-5">
 
           <div>
-            <label className="block text-[10px] uppercase tracking-widest font-semibold text-text-primary mb-1.5">Full Name</label>
-            <input
-              type="text" autoComplete="on"
-              name="name"
-              placeholder="Jane Doe"
-              className="w-full px-4 py-2.5 bg-primary border border-border text-sm text-text-primary rounded-none focus:outline-none focus:border-accent transition-colors placeholder:text-text-secondary/30"
-              value={formData.name}
-              onChange={(e) => handleChange(e)}
-            />
+            <label htmlFor="name" className="block text-[10px] uppercase tracking-widest font-semibold text-text-primary mb-1.5">Full Name</label>
+              <input
+                id="name"
+                type="text" autoComplete="on"
+                name="name"
+                placeholder="Jane Doe"
+                className="w-full px-4 py-2.5 bg-primary border border-border text-sm text-text-primary rounded-none focus:outline-none focus:border-accent transition-colors placeholder:text-text-secondary/30"
+                value={formData.name}
+                onChange={(e) => handleChange(e)} />
           </div>
 
           <div>
-            <label className="block text-[10px] uppercase tracking-widest font-semibold text-text-primary mb-1.5">Email</label>
-            <input
-              type="email"
-              name="email"
-              placeholder="name@domain.com"
-              className="w-full px-4 py-2.5 bg-primary border border-border text-sm text-text-primary rounded-none focus:outline-none focus:border-accent transition-colors placeholder:text-text-secondary/30"
-              value={formData.email}
-              onChange={(e) => handleChange(e)}
-            />
+            <label htmlFor="email" className="block text-[10px] uppercase tracking-widest font-semibold text-text-primary mb-1.5">Email</label>
+              <input
+                id="email"
+                type="email"
+                name="email"
+                placeholder="name@domain.com"
+                className="w-full px-4 py-2.5 bg-primary border border-border text-sm text-text-primary rounded-none focus:outline-none focus:border-accent transition-colors placeholder:text-text-secondary/30"
+                value={formData.email}
+                onChange={(e) => handleChange(e)} />
           </div>
 
           <div>
-            <label className="block text-[10px] uppercase tracking-widest font-semibold text-text-primary mb-1.5">Password</label>
-            <input
-              type="password"
-              name="password"
-              placeholder="Create secure password"
-              className="w-full px-4 py-2.5 bg-primary border border-border text-sm text-text-primary rounded-none focus:outline-none focus:border-accent transition-colors placeholder:text-text-secondary/30"
-              value={formData.password}
-              onChange={(e) => handleChange(e)}
-            />
+            <label htmlFor="password" className="block text-[10px] uppercase tracking-widest font-semibold text-text-primary mb-1.5">Password</label>
+              <input
+                id="password"
+                type="password"
+                name="password"
+                placeholder="Create secure password"
+                className="w-full px-4 py-2.5 bg-primary border border-border text-sm text-text-primary rounded-none focus:outline-none focus:border-accent transition-colors placeholder:text-text-secondary/30"
+                value={formData.password}
+                onChange={(e) => handleChange(e)} />
           </div>
 
           <button

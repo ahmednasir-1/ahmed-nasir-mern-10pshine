@@ -10,7 +10,7 @@
 ![JWT](https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens)
 
 
-A modern, feature-rich notes application built with React, Node.js, Express, and MongoDB. Notely allows users to create, edit, organize, and manage notes with a clean and intuitive interface.
+A modern, feature-rich notes application built with React, Node.js, Express, and MongoDB. Allows users to create, edit, organize, and manage notes with a clean and intuitive interface.
 
 ---
 
@@ -20,8 +20,8 @@ A modern, feature-rich notes application built with React, Node.js, Express, and
 - **Notes Management** — Create, Edit, Delete, Pin notes with a rich text editor
 - **Trash System** — Soft delete with 30-day auto-deletion via cron job
 - **Search** — Real-time note filtering by title
-- **User Profile** — Update name, profile picture, and change password
-- **Rich Text Editor** — Full formatting support (bold, italic, headings, lists, alignment)
+- **User Profile** — Update name and change password
+- **Rich Text Editor** — Full formatting support (bold, italic, headings, lists, alignment etc)
 - **JWT Authentication** — Secure token-based auth for all protected routes
 - **Email Notifications** — Verification and password reset emails via Nodemailer
 
@@ -32,7 +32,7 @@ A modern, feature-rich notes application built with React, Node.js, Express, and
 ### Frontend
 | Technology | Purpose |
 |---|---|
-| React 18 | UI Framework |
+| React JS | UI Framework |
 | Vite | Build Tool |
 | Tailwind CSS | Styling |
 | React Router DOM | Client-side Routing |
@@ -65,7 +65,8 @@ cd backend
 npm install
 ```
 
-Create a `.env` file in the `backend` folder:
+Create a `.env` file in the `root` folder:
+
 
 ```env
 PORT=5000
@@ -74,6 +75,7 @@ JWT_SECRET=your_jwt_secret_key
 EMAIL=your_email@gmail.com
 PASS=your_gmail_app_password
 ```
+
 
 Start the backend server:
 
@@ -99,7 +101,7 @@ npm run dev
 
 ---
 
-### 4. Open in Browser
+### 3. Open in Browser
 
 ```
 Frontend: http://localhost:5173
